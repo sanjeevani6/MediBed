@@ -9,9 +9,9 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get("http://localhost:8080/api/auth/check-auth", { withCredentials: true });
+        const res = await axios.get("/api/v1/auth/check-auth", { withCredentials: true });
         setUser(res.data.user);
-        console.log("Check auth response:", res.data);
+        console.log("Check auth response in dashboard:", res.data);
       } catch(error) {
         console.error("Check auth error:", error.response?.data || error.message);
       }
@@ -20,7 +20,7 @@ const Dashboard = () => {
   }, [navigate]);
 
   const handleLogout = async () => {
-    await axios.post("http://localhost:8080/api/auth/logout", {}, { withCredentials: true });
+    await axios.post("/api/v1/auth/logout", {}, { withCredentials: true });
     navigate("/");
   };
 
@@ -45,7 +45,7 @@ const Dashboard = () => {
         {/* Top Bar */}
         <header className="top-bar">
           <h1>Dashboard</h1>
-          {user && <span>Welcome, {user.role}</span>}
+          {user && <span>Welcome, {user.name}</span>}
         </header>
 
         {/* Main Section */}
