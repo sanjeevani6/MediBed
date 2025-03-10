@@ -20,12 +20,10 @@ const Login = () => {
       );
     
       console.log("Login response:", res.data);
-      setTimeout(() => {
+   
         console.log("Navigating to /dashboard..."); // Debugging
-        navigate("/dashboard");
-      }, 100); // Delay navigation slightly
-     
-     // navigate("/dashboard"); // Redirect on success
+        navigate("/dashboard");//Redirect on Success
+
     } catch (err) {
       setError(err.response?.data?.message || "Invalid credentials");
     }
