@@ -12,7 +12,7 @@ const Dashboard = () => {
         const res = await axios.get("/api/v1/auth/check-auth", { withCredentials: true });
         setUser(res.data.user);
         console.log("Check auth response in dashboard:", res.data);
-      } catch(error) {
+      } catch (error) {
         console.error("Check auth error:", error.response?.data || error.message);
       }
     };
@@ -35,10 +35,16 @@ const Dashboard = () => {
             <li>Patients</li>
             <li>Doctors</li>
             <li>Beds</li>
+            {user?.role === "superadmin" && (
+              <li onClick={() => navigate("/add-staff")} className="clickable">
+                Add Staff
+              </li>
+            )}
           </ul>
         </nav>
         <button onClick={handleLogout} className="logout-button">Logout</button>
       </aside>
+
 
       {/* Main Content */}
       <div className="main-content">

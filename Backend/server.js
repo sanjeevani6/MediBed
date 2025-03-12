@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js"; // Import DB connection
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/authRoutes.js";
+import addstaffroute from"./routes/staff.js"
 
 //config 
 
@@ -25,6 +26,7 @@ app.use(cookieParser());
 
 //Routes 
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/staff",addstaffroute);
 
 const PORT = process.env.PORT || 5000;
 
