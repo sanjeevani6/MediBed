@@ -1,0 +1,33 @@
+import Doctor from "../models/doctormodel.js";
+
+// Get all doctors
+ export const getDoctors = async (req, res) => {
+  try {
+    const doctors = await Doctor.find();
+    res.status(200).json(doctors);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching doctors", error });
+  }
+};
+
+// Delete a doctor (Only superadmin can delete)
+export const deleteDoctor = async (req, res) => {
+  try {
+    if (req.user.role !== "superadmin") {
+      return res.status(403).json({ message: "Unauthorized: Only superadmin can delete doctors" });
+    }
+
+    const { id } = req.params;
+    const deletedDoctor = await Doctor.findByIdAndDelete(id);
+
+    if (!deletedDoctor) {
+      return res.status(404).json({ message: "Doctor not found" });
+    }
+
+    res.status(200).json({ message: "Doctor deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting doctor", error });
+  }
+};
+
+

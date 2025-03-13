@@ -31,15 +31,25 @@ const Dashboard = () => {
         <div className="brand">MediBed</div>
         <nav>
           <ul>
-            <li>Dashboard</li>
             <li>Patients</li>
-            <li>Doctors</li>
+            <li onClick={() => navigate("/staff-list")} className="clickable">Staff</li>
+            <li onClick={() => navigate("/doctor-list")} className="clickable">Doctors</li>
             <li>Beds</li>
             {user?.role === "superadmin" && (
               <li onClick={() => navigate("/add-staff")} className="clickable">
                 Add Staff
               </li>
+
             )}
+            {user?.role === "superadmin" && (
+              <li onClick={() => navigate("/add-doctor")} className="clickable">
+                Add Doctor
+              </li>
+            )}
+            <li onClick={() => navigate("/add-patient")} className="clickable">
+                Add Patient
+              </li>
+
           </ul>
         </nav>
         <button onClick={handleLogout} className="logout-button">Logout</button>

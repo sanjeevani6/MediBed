@@ -6,6 +6,10 @@ import Login from "./pages/Login.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import AddStaff from "./pages/AddStaff.jsx";
+import AddDoctor from "./pages/AddDoctor.jsx";
+import AddPatient from "./pages/AddPatient.jsx";
+import StaffList from "./pages/StaffList";
+import DoctorList from "./pages/DoctorList";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -35,7 +39,11 @@ const App = () => {
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<PrivateRoute user={user}><Dashboard /></PrivateRoute>} />
+        <Route path="/staff-list" element={<StaffList user={user} />} />
+        <Route path="/doctor-list" element={<DoctorList user={user} />} />
         <Route path="/add-staff" element={<AddStaff user={user} />} />
+        <Route path="/add-doctor" element={<AddDoctor user={user} />} />
+        <Route path="/add-patient" element={<AddPatient user={user} />} />
       </Routes>
     </Router>
   );
