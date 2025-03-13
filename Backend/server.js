@@ -7,6 +7,7 @@ import authRoutes from "./routes/authRoutes.js";
 import addstaffroute from "./routes/staff.js"
 import doctorRoute from "./routes/doctor.js"
 import patientRoute from "./routes/patientRoutes.js"
+import bedRoutes from"./routes/bedRoutes.js"
 
 //config 
 
@@ -31,6 +32,7 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/staff",addstaffroute);
 app.use("/api/v1/doctor",doctorRoute);
 app.use("/api/v1/patients",patientRoute);
+app.use("/api/v1/beds",bedRoutes);
 
 
 const PORT = process.env.PORT || 5000;

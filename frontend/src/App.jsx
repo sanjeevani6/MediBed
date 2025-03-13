@@ -10,7 +10,10 @@ import AddDoctor from "./pages/AddDoctor.jsx";
 import AddPatient from "./pages/AddPatient.jsx";
 import StaffList from "./pages/StaffList";
 import DoctorList from "./pages/DoctorList";
-
+import PatientList from "./pages/PatientList";
+import PatientDetail from "./pages/PatientDetail";
+import BedList from "./pages/BedList";
+import BedDetail from "./pages/BedDetail";
 const App = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -44,6 +47,10 @@ const App = () => {
         <Route path="/add-staff" element={<AddStaff user={user} />} />
         <Route path="/add-doctor" element={<AddDoctor user={user} />} />
         <Route path="/add-patient" element={<AddPatient user={user} />} />
+        <Route path="/patients" element={<PatientList />} />
+        <Route path="/patients/:id" element={<PatientDetail />} />
+        <Route path="/beds" element={<BedList />} />
+        <Route path="/beds/:id" element={<BedDetail />} />
       </Routes>
     </Router>
   );

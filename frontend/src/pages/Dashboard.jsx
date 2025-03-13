@@ -31,10 +31,10 @@ const Dashboard = () => {
         <div className="brand">MediBed</div>
         <nav>
           <ul>
-            <li>Patients</li>
+          <li onClick={() => navigate("/patients")} className="clickable">Patients</li>
             <li onClick={() => navigate("/staff-list")} className="clickable">Staff</li>
             <li onClick={() => navigate("/doctor-list")} className="clickable">Doctors</li>
-            <li>Beds</li>
+            <li onClick={() => navigate("/beds")} className="clickable">Beds</li>
             {user?.role === "superadmin" && (
               <li onClick={() => navigate("/add-staff")} className="clickable">
                 Add Staff

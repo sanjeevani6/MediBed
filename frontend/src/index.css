@@ -207,3 +207,50 @@ nav ul li:hover {
 }
 
 
+/*** patient syling ***/
+.patient-list-container {
+  text-align: center;
+}
+
+.toggle-buttons button {
+  margin: 5px;
+  padding: 10px;
+  border: none;
+  background-color: lightgray;
+  cursor: pointer;
+}
+
+.toggle-buttons .active {
+  background-color: blue;
+  color: white;
+}
+
+.patient-list {
+  list-style: none;
+  padding: 0;
+}
+
+.patient-list li {
+  padding: 10px;
+  margin: 5px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.patient-list li:hover {
+  background-color: #f0f0f0;
+}
+
+.patient-detail-container {
+  text-align: left;
+  margin: 20px;
+}
+
+.discharge-button {
+  background-color: red;
+  color: white;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+}
+

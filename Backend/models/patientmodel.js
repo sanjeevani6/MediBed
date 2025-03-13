@@ -14,10 +14,19 @@ const patientSchema = new mongoose.Schema(
     address: { type: String, required: true },
     status: { type: String, enum: ["DISCHARGED","ADMITTED"],required: true },
     severity: { type: Number, required: true }, // 1 = Low, 2 = Moderate, 3 = Critical
+    severityHistory: [
+      {
+        severity: { type: Number, required: true },
+        timestamp: { type: Date, default: Date.now },
+        note: { type: String } // Optional doctor's note
+      }
+    ],
     bedType: { type: String, enum: ["ICU", "General", "Regular"], required: true },
     assignedBed: { type: mongoose.Schema.Types.ObjectId, ref: "Bed", default: null },
     admittedAt: { type: Date, default: Date.now },
+    
   },
+  { collection: "patients", timestamps: true }, // Ensure correct collection name
   { timestamps: true } // Adds createdAt and updatedAt fields automatically
 );
 
