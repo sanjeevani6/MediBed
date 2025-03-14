@@ -28,7 +28,7 @@ MediBed is a **hospital bed management system** designed for **hospital staff** 
 ### 1️⃣ Fork and Clone the Repository
 
 # Clone the repo
-git clone https://github.com/YOUR_USERNAME/MediBed.git
+git clone https://github.com/sanjeevani6/MediBed
 cd MediBed
 
 ### 2️⃣ Backend Setup
