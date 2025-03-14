@@ -1,4 +1,5 @@
 import { Patient } from "../models/patientmodel.js";
+import Bed from "../models/bedmodel.js";
 
 // to add patient
 export const addPatient = async (req, res) => {
@@ -15,6 +16,12 @@ export const addPatient = async (req, res) => {
       bedType,
     } = req.body;
     console.log("request body",req.body);
+     // Check for an available bed of the requested type
+    const availableBed = await Bed.findOne({ type: bedType, status: "Vacant" });
+    console.log("availableBed",availableBed);
+    if (!availableBed) {
+      return res.status(400).json({ message: `No vacant ${bedType} beds available.` });
+    }
 
     // Validate required fields
     if (!name || !age || !weight || !phoneNumber || !bloodGroup || !address || !status || !severity || !bedType) {
@@ -32,10 +39,21 @@ export const addPatient = async (req, res) => {
       status,
       severity,
       bedType,
+      assignedBed: availableBed._id,
     });
 
     await newPatient.save();
-    res.status(201).json({ message: "Patient added successfully!", patient: newPatient });
+
+      // Assign the available bed to this patient
+      availableBed.patient = newPatient._id;
+      availableBed.status = "Occupied";
+  
+      // Save bed allocation
+      await availableBed.save();
+    res.status(201).json({ message: "Patient added successfully and bed allocated!",
+       patient: newPatient,
+       allocatedBed: availableBed,
+       });
   } catch (error) {
     console.error("Error adding patient:", error);
     res.status(500).json({ message: "Internal Server Error" });
