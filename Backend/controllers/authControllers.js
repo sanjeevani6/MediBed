@@ -40,14 +40,7 @@ export const loginStaff = async (req, res) => {
  // console.log("Collections available:", await mongoose.connection.db.listCollections().toArray());
  // const staff = await Staff.findOne({ staffID: "202" });
 //console.log("Matching staff document:", staff);
- 
-
-
   try {
-
-
-
-    
    const staff = await Staff.findOne({ staffID: req.body.staffID }); 
     console.log("staff",staff);
     if (!staff) return res.status(400).json({ message: "Invalid credentials" });
