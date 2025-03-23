@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
-
 const Dashboard = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-
+  const [totalPatients,setTotalPatients]=useState(0);
+  const [availableBeds, setAvailableBeds] = useState(0);
+  const [doctorsOnDuty, setDoctorsOnDuty] = useState(0);
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -16,7 +17,25 @@ const Dashboard = () => {
         console.error("Check auth error:", error.response?.data || error.message);
       }
     };
+    const fetchStats = async () => {
+      try {
+        const patientsRes = await axios.get("/api/v1/patients/count");
+        setTotalPatients(patientsRes.data.count);
+
+        
+
+        const doctorsRes = await axios.get("/api/v1/doctor/count");
+        setDoctorsOnDuty(doctorsRes.data.count);
+
+        const bedsRes = await axios.get("/api/v1/beds/count");
+        setAvailableBeds(bedsRes.data.count);
+      } catch (error) {
+        console.error("Error fetching stats:", error.response?.data || error.message);
+      }
+    };
+
     fetchUser();
+    fetchStats();
   }, [navigate]);
 
   const handleLogout = async () => {
@@ -28,7 +47,7 @@ const Dashboard = () => {
     <div className="dashboard-container">
       {/* Sidebar */}
       <aside className="sidebar">
-        <div className="brand">MediBed</div>
+        <div className="brand text-red-800">MediBed</div>
         <nav>
           <ul>
           <li onClick={() => navigate("/patients")} className="clickable">Patients</li>
@@ -69,15 +88,15 @@ const Dashboard = () => {
           {/* Cards for Overview */}
           <div className="stats-card">
             <h3>Total Patients</h3>
-            <p>120</p>
+            <p>{totalPatients}</p>
           </div>
           <div className="stats-card">
             <h3>Available Beds</h3>
-            <p>30</p>
+            <p>{availableBeds}</p>
           </div>
           <div className="stats-card">
             <h3>Doctors on Duty</h3>
-            <p>15</p>
+            <p>{doctorsOnDuty}</p>
           </div>
         </main>
       </div>

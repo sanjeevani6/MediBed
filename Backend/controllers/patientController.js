@@ -59,7 +59,15 @@ export const addPatient = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
+//to count number of patients
+export const countPatients=async(req,res)=>{
+  try {
+    const count = await Patient.countDocuments();
+    res.json({ count });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch patient count" });
+  }
+};
 //to get patient
 export const getPatients = async (req, res) => {
   try {

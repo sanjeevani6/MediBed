@@ -1,7 +1,7 @@
 import express from "express";
 import {authMiddleware} from "../middlewares/authMiddleware.js";
 import addDoctor from "../controllers/adddoctorController.js";
-import { deleteDoctor, getDoctors } from "../controllers/doctorController.js";
+import { countDoctors, deleteDoctor, getDoctors } from "../controllers/doctorController.js";
 
 const router = express.Router();
 
@@ -16,6 +16,7 @@ const checkSuperadmin = (req, res, next) => {
 router.post("/add-dr", authMiddleware, checkSuperadmin,addDoctor);
 router.get("/", getDoctors);
 router.delete("/:id", authMiddleware, deleteDoctor);
+router.get("/count",authMiddleware,countDoctors);
 
 
 export default router

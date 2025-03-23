@@ -18,6 +18,15 @@ export const getAllBeds = async (req, res) => {
     res.status(500).json({ message: "Server Error", error });
   }
 };
+export const countBeds = async (req, res) => {
+  try {
+    // Count beds where status is "Vacant"
+    const count = await Bed.countDocuments({ status: "Vacant" });
+    res.json({ count });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch bed count" });
+  }
+};
 
 export const getBedHistory = async (req, res) => {
   try {

@@ -10,6 +10,15 @@ import Doctor from "../models/doctormodel.js";
   }
 };
 
+export const countDoctors=async (req, res) => {
+  try {
+    const count = await Doctor.countDocuments();
+    res.json({ count });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch doctor count" });
+  }
+};
+
 // Delete a doctor (Only superadmin can delete)
 export const deleteDoctor = async (req, res) => {
   try {
