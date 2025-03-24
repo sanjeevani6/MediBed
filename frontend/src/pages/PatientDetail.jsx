@@ -36,7 +36,12 @@ const PatientDetail = () => {
     try {
       const res = await axios.put(`/api/v1/patients/${id}/severity`, { severity:Number(severity), note });
       setPatient(res.data.patient);
-      alert("Severity updated successfully!");
+      
+      if (res.data.bedMessage) {
+        alert(res.data.bedMessage);
+      } else {
+        alert("Severity updated successfully!");
+      }
     } catch (error) {
       console.error("Error updating severity:", error);
     }
