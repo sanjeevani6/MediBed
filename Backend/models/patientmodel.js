@@ -34,7 +34,7 @@ const patientSchema = new mongoose.Schema(
     ],
   },
   { collection: "patients", timestamps: true }, // Ensure correct collection name
-  { timestamps: true } // Adds createdAt and updatedAt fields automatically
+  // { timestamps: true } // Adds createdAt and updatedAt fields automatically
 );
 
 export  const Patient = mongoose.model("Patient", patientSchema);
