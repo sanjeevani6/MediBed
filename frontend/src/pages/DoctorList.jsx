@@ -46,13 +46,13 @@ import { useEffect, useState } from "react";
            placeholder="🔍 Search by Name or Specialization..."
            value={searchQuery}
            onChange={(e) => setSearchQuery(e.target.value)}
-           className="w-1/3 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+           className="w-1/3 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-8080 focus:border-blue-8080 transition-all duration-300"
          />
  
          {/* Back to Dashboard Button */}
          <button
            onClick={() => navigate("/dashboard")}
-           className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition duration-300"
+           className="px-4 py-2 bg-blue-8080 text-white rounded-lg shadow hover:bg-blue-600 transition duration-300"
          >
            Back to Dashboard
          </button>

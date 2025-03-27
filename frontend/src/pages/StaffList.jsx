@@ -67,7 +67,7 @@ import { useEffect, useState } from "react";
      placeholder="🔍 Search by name or role..."
      value={searchQuery}
      onChange={(e) => setSearchQuery(e.target.value)}
-     className="flex-grow px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 mr-4"
+     className="flex-grow px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-8080 focus:border-blue-8080 transition-all duration-300 mr-4"
    />
    
    <div className="flex items-center gap-4">
@@ -76,7 +76,7 @@ import { useEffect, useState } from "react";
          type="checkbox"
          checked={filterSuperadmin}
          onChange={() => setFilterSuperadmin(!filterSuperadmin)}
-         className="form-checkbox text-blue-500"
+         className="form-checkbox text-blue-8080"
        />
        Superadmin
      </label>
@@ -86,7 +86,7 @@ import { useEffect, useState } from "react";
          type="checkbox"
          checked={filterStaff}
          onChange={() => setFilterStaff(!filterStaff)}
-         className="form-checkbox text-blue-500"
+         className="form-checkbox text-blue-8080"
        />
        Staff
      </label>
@@ -108,7 +108,7 @@ import { useEffect, useState } from "react";
              </div>
            ))
          ) : (
-           <p className="text-gray-500 w-full text-center">No staff found.</p>
+           <p className="text-gray-8080 w-full text-center">No staff found.</p>
          )}
        </div>
      </div>

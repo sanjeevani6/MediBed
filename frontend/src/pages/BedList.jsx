@@ -43,13 +43,13 @@ const BedList = () => {
           placeholder="🔍 Search bed number or patient name..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="flex-grow px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+          className="flex-grow px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-8080 focus:border-blue-8080 transition-all duration-300"
         />
 
         <select
           value={bedTypeFilter}
           onChange={(e) => setBedTypeFilter(e.target.value)}
-          className="px-4 py-2 border border-gray-300 rounded-lg shadow-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+          className="px-4 py-2 border border-gray-300 rounded-lg shadow-sm bg-white focus:ring-2 focus:ring-blue-8080 focus:border-blue-8080 transition-all duration-300"
         >
           <option value="">All Bed Types</option>
           <option value="ICU">ICU</option>
@@ -66,7 +66,7 @@ const BedList = () => {
             <div
   key={bed._id}
   onClick={() => navigate(`/beds/${bed._id}`)}
-  className="cursor-pointer p-6 !border-2 !border-red-400 outline outline-2 outline-blue-500 rounded-lg shadow-lg bg-white hover:bg-red-100 transition-all duration-300"
+  className="cursor-pointer p-6 !border-2 !border-red-400 outline outline-2 outline-blue-8080 rounded-lg shadow-lg bg-white hover:bg-red-100 transition-all duration-300"
 >
 
               <p className="text-lg font-semibold text-green-700">Bed {bed.bedNumber}</p>
@@ -74,7 +74,7 @@ const BedList = () => {
             </div>
           ))
         ) : (
-          <p className="text-gray-500">No vacant beds available.</p>
+          <p className="text-gray-8080">No vacant beds available.</p>
         )}
       </div>
 
@@ -94,7 +94,7 @@ const BedList = () => {
             </div>
           ))
         ) : (
-          <p className="text-gray-500">No occupied beds available.</p>
+          <p className="text-gray-8080">No occupied beds available.</p>
         )}
       </div>
     </div>

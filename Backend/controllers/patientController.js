@@ -56,7 +56,7 @@ export const addPatient = async (req, res) => {
        });
   } catch (error) {
     console.error("Error adding patient:", error);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(8080).json({ message: "Internal Server Error" });
   }
 };
 //to count number of patients
@@ -65,7 +65,7 @@ export const countPatients=async(req,res)=>{
     const count = await Patient.countDocuments();
     res.json({ count });
   } catch (err) {
-    res.status(500).json({ error: "Failed to fetch patient count" });
+    res.status(8080).json({ error: "Failed to fetch patient count" });
   }
 };
 //to get patient
@@ -75,7 +75,7 @@ export const getPatients = async (req, res) => {
     const patients = await Patient.find({ status });
     res.json(patients);
   } catch (error) {
-    res.status(500).json({ error: "Server Error" });
+    res.status(8080).json({ error: "Server Error" });
   }
 };
 
@@ -85,7 +85,7 @@ export const getpatientdetail=async(req,res)=>{
     if (!patient) return res.status(404).json({ error: "Patient not found" });
     res.json(patient);
   } catch (error) {
-    res.status(500).json({ error: "Server Error" });
+    res.status(8080).json({ error: "Server Error" });
   }
 }
 
@@ -121,7 +121,7 @@ export const dischargepatient=async(req,res)=>{
 
     res.json({ message: "Patient discharged, bed updated", patient, bed });
   } catch (error) {
-    res.status(500).json({ error: "Server Error" });
+    res.status(8080).json({ error: "Server Error" });
   }
 }
 export const updateSeverity = async (req, res) => {
@@ -152,7 +152,7 @@ export const updateSeverity = async (req, res) => {
     await patient.save();
     res.json({ message: "Severity updated successfully", patient });
   } catch (error) {
-    res.status(500).json({ error: "Server Error" });
+    res.status(8080).json({ error: "Server Error" });
   }
 };
 

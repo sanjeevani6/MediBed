@@ -68,6 +68,7 @@ const Dashboard = () => {
             <li onClick={() => navigate("/add-patient")} className="clickable">
                 Add Patient
               </li>
+            <li onClick={() => navigate("/chat")} className="clickable">Chat</li>
 
           </ul>
         </nav>
