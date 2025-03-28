@@ -14,6 +14,8 @@ import PatientList from "./pages/PatientList";
 import PatientDetail from "./pages/PatientDetail";
 import BedList from "./pages/BedList";
 import BedDetail from "./pages/BedDetail";
+import AddBed from "./pages/AddBed";
+
 const App = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -51,6 +53,8 @@ const App = () => {
         <Route path="/patients/:id" element={<PatientDetail />} />
         <Route path="/beds" element={<BedList />} />
         <Route path="/beds/:id" element={<BedDetail />} />
+        <Route path="/add-bed" element={<AddBed user={user} />} />
+
       </Routes>
     </Router>
   );

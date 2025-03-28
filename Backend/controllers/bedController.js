@@ -1,5 +1,29 @@
 import Bed from "../models/bedmodel.js";
 
+export const addBed = async (req, res) => {
+  try {
+    const { bedNumber, type } = req.body;
+
+    // Check if the bed already exists
+    const existingBed = await Bed.findOne({ bedNumber });
+    if (existingBed) {
+      return res.status(400).json({ message: "Bed already exists!" });
+    }
+
+    const newBed = new Bed({
+      bedNumber,
+      type,
+      status: "Vacant",
+    });
+
+    await newBed.save();
+    res.status(201).json({ message: "Bed added successfully!", bed: newBed });
+  } catch (error) {
+    console.error("Error adding bed:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 export const getAllBeds = async (req, res) => {
   try {
     const beds = await Bed.find().populate({

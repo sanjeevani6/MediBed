@@ -28,6 +28,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 //Routes 
+app.use("/api/v1/beds", bedRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/staff",addstaffroute);
 app.use("/api/v1/doctor",doctorRoute);
