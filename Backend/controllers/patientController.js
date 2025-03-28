@@ -56,10 +56,18 @@ export const addPatient = async (req, res) => {
        });
   } catch (error) {
     console.error("Error adding patient:", error);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(8080).json({ message: "Internal Server Error" });
   }
 };
-
+//to count number of patients
+export const countPatients=async(req,res)=>{
+  try {
+    const count = await Patient.countDocuments();
+    res.json({ count });
+  } catch (err) {
+    res.status(8080).json({ error: "Failed to fetch patient count" });
+  }
+};
 //to get patient
 export const getPatients = async (req, res) => {
   try {
@@ -67,7 +75,7 @@ export const getPatients = async (req, res) => {
     const patients = await Patient.find({ status });
     res.json(patients);
   } catch (error) {
-    res.status(500).json({ error: "Server Error" });
+    res.status(8080).json({ error: "Server Error" });
   }
 };
 
@@ -77,7 +85,7 @@ export const getpatientdetail=async(req,res)=>{
     if (!patient) return res.status(404).json({ error: "Patient not found" });
     res.json(patient);
   } catch (error) {
-    res.status(500).json({ error: "Server Error" });
+    res.status(8080).json({ error: "Server Error" });
   }
 }
 
@@ -113,15 +121,15 @@ export const dischargepatient=async(req,res)=>{
 
     res.json({ message: "Patient discharged, bed updated", patient, bed });
   } catch (error) {
-    res.status(500).json({ error: "Server Error" });
+    res.status(8080).json({ error: "Server Error" });
   }
 }
 export const updateSeverity = async (req, res) => {
   try {
     const { severity, note } = req.body;
     const patientId = req.params.id;
-
     const severityNum = Number(severity);
+
     if (![1, 2, 3].includes(severityNum)) {
       return res.status(400).json({ error: "Invalid severity value" });
     }
@@ -131,21 +139,90 @@ export const updateSeverity = async (req, res) => {
       return res.status(404).json({ error: "Patient not found" });
     }
 
-    // Push new severity record to history with timestamp
-    patient.severityHistory.push({ 
-      severity: severityNum, 
-      note, 
-      timestamp: new Date() // Store the timestamp
-    });
+    const previousSeverity = patient.severity;
+    let bedMessage = "";
 
-    // Update current severity
+    // If severity decreases (Critical → Moderate/Low), move from ICU to General
+    if (previousSeverity === 3 && severityNum < 3) {
+      const currentBed = await Bed.findById(patient.assignedBed);
+      if (currentBed) {
+        // Free ICU bed
+        currentBed.status = "Vacant";
+        currentBed.patient = null;
+        await currentBed.save();
+      }
+
+      // Find a General Ward Bed
+      const generalBed = await Bed.findOne({ type: "General", status: "Vacant" });
+      const regularBed = await Bed.findOne({ type: "Regular", status: "Vacant" });
+
+      if (generalBed) {
+        generalBed.status = "Occupied";
+        generalBed.patient = patient._id;
+        await generalBed.save();
+
+        // **Update patient's assigned bed**
+        patient.assignedBed = generalBed._id;
+        patient.bedType=generalBed.type;
+        await patient.save(); // ✅ Ensure patient update is saved
+
+        bedMessage = "Patient moved from ICU to General Ward.";
+      } 
+      else if (regularBed) {
+        regularBed.status = "Occupied";
+        regularBed.patient = patient._id;
+        await regularBed.save();
+
+        // **Update patient's assigned bed**
+        patient.assignedBed = regularBed._id;
+        patient.bedType=regularBed.type;
+        await patient.save(); // ✅ Ensure patient update is saved
+
+        bedMessage = "Patient moved from ICU to Regular Ward.";
+      } 
+      else {
+        return res.status(400).json({ error: "No vacant General or Regular Ward beds available. Cannot change severity." });
+      }
+    }
+
+    // If severity increases (Moderate/Low → Critical), move to ICU
+    if (previousSeverity < 3 && severityNum === 3) {
+      const currentBed = await Bed.findById(patient.assignedBed);
+      if (currentBed) {
+        // Free General Bed
+        currentBed.status = "Vacant";
+        currentBed.patient = null;
+        await currentBed.save();
+      }
+
+      // Find an ICU Bed
+      const icuBed = await Bed.findOne({ type: "ICU", status: "Vacant" });
+      console.log(icuBed)
+      if (icuBed) {
+        icuBed.status = "Occupied";
+        icuBed.patient = patient._id;
+        await icuBed.save();
+
+        // **Update patient's assigned bed**
+        patient.assignedBed = icuBed._id;
+        patient.bedType=icuBed.type;
+        await patient.save(); // ✅ Ensure patient update is saved
+
+        bedMessage = "Patient moved to ICU due to severity increase.";
+      } else {
+        return res.status(400).json({ error: "No vacant ICU beds available. Cannot change severity." });
+      }
+    }
+
+    // Update severity and history
     patient.severity = severityNum;
+    patient.severityHistory.push({ severity: severityNum, note, timestamp: new Date() });
+    
+    await patient.save(); // ✅ Ensure all updates are saved
 
-    await patient.save();
-    res.json({ message: "Severity updated successfully", patient });
+    res.json({ message: "Severity updated successfully.", patient, bedMessage });
+
   } catch (error) {
     res.status(500).json({ error: "Server Error" });
   }
 };
-
-

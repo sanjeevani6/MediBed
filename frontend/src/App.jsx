@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import './index.css';
+import Chat from './pages/Chat';
 import Login from "./pages/Login.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
@@ -14,6 +15,7 @@ import PatientList from "./pages/PatientList";
 import PatientDetail from "./pages/PatientDetail";
 import BedList from "./pages/BedList";
 import BedDetail from "./pages/BedDetail";
+import { ChakraProvider } from "@chakra-ui/react";
 const App = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -37,6 +39,7 @@ const App = () => {
   }
 
   return (
+    <ChakraProvider>
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
@@ -51,8 +54,10 @@ const App = () => {
         <Route path="/patients/:id" element={<PatientDetail />} />
         <Route path="/beds" element={<BedList />} />
         <Route path="/beds/:id" element={<BedDetail />} />
+        <Route path="/chat" element={<Chat />} />
       </Routes>
     </Router>
+    </ChakraProvider>
   );
 };
 

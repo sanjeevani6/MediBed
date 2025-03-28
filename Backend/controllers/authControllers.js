@@ -68,7 +68,8 @@ export const loginStaff = async (req, res) => {
     console.log(" setting cookies done");
     const responseData = {
         message: "Login successful",
-        staff: { name: staff.name, staffID: staff.staffID, role: staff.role },
+        staff: { name: staff.name, staffID: staff.staffID, role: staff.role,_id:staff._id },
+        token:accessToken
       };
   
       console.log("Sending response:", responseData);
@@ -76,7 +77,7 @@ export const loginStaff = async (req, res) => {
       return res.json(responseData);
    
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    res.status(8080).json({ message: "Server error" });
   }
 };
 
