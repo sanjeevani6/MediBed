@@ -42,6 +42,12 @@ export const addPatient = async (req, res) => {
       bedType,
       assignedBed: availableBed._id,
       admittedAt: new Date(),
+      bedHistory: [
+        {
+          bedType: bedType,
+          admittedAt: new Date(),
+        },
+      ],
     });
 
     await newPatient.save();
@@ -119,7 +125,7 @@ export const dischargepatient=async(req,res)=>{
     patient.bedHistory.push({
       bedType: bed.type,
       admittedAt: patient.admittedAt,
-      dischargedAt: new Date(),
+      dischargedAt: dischargeDate,
     });
 
     let totalCost = 0;
