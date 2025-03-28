@@ -13,17 +13,25 @@ const Login = () => {
     setError(""); // Reset error before new request
 
     try {
-      const res=await axios.post(
+      const { data } = await axios.post(
         "/api/v1/auth/login",
         { staffID, password },
-        { withCredentials: true } // Allows cookies
+        { withCredentials: true }
       );
-    
-      console.log("Login response:", res.data);
-   
+      
+      console.log("Full login response:", data); // Debugging
+      if (data.staff && data.token) {
+        const userInfo = {
+          ...data.staff,
+          token: data.token, // Add token to userInfo
+        };
+  
+        localStorage.setItem("userInfo", JSON.stringify(userInfo));
         console.log("Navigating to /dashboard..."); // Debugging
-        navigate("/dashboard");//Redirect on Success
-
+        navigate("/dashboard"); // Redirect on success
+      } else {
+        throw new Error("Invalid response from server");
+      }
     } catch (err) {
       setError(err.response?.data?.message || "Invalid credentials");
     }

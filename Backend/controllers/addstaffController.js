@@ -1,5 +1,5 @@
 import Staff from "../models/staffmodel.js";
-import bcrypt from "bcrypt";
+import bcrypt from 'bcrypt';
 const addstaff =
     async (req, res) => {
         try {

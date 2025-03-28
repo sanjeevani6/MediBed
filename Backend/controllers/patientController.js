@@ -48,6 +48,13 @@ export const addPatient = async (req, res) => {
           admittedAt: new Date(),
         },
       ],
+      severityHistory: [
+        {
+          severity: severity, // Store the initial severity
+          note: "Initial severity on admission",
+          timestamp: new Date(),
+        },
+      ],
     });
 
     await newPatient.save();
@@ -121,6 +128,7 @@ export const dischargepatient=async(req,res)=>{
     }
 
     let totalCost = 0;
+    if (!patient.bedHistory) patient.bedHistory = [];
 
     for (const history of patient.bedHistory) {
       if (history.dischargedAt) {
@@ -133,6 +141,8 @@ export const dischargepatient=async(req,res)=>{
 
     patient.totalCost += totalCost;
     await patient.save();
+
+    const dischargeDate = new Date(); // ✅ Define discharge date
 
     // Push the discharged patient into the history array
     bed.history.push({
@@ -283,7 +293,6 @@ export const updateSeverity = async (req, res) => {
     res.json({ message: "Severity updated successfully.", patient, bedMessage });
 
   } catch (error) {
-    console.error("Error updating severity:", error);
     res.status(500).json({ error: "Server Error" });
   }
 };
