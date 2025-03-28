@@ -120,14 +120,6 @@ export const dischargepatient=async(req,res)=>{
       return res.status(400).json({ error: "Bed not found for this patient" });
     }
 
-    const dischargeDate = new Date();
-
-    patient.bedHistory.push({
-      bedType: bed.type,
-      admittedAt: patient.admittedAt,
-      dischargedAt: dischargeDate,
-    });
-
     let totalCost = 0;
 
     for (const history of patient.bedHistory) {
