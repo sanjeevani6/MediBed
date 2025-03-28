@@ -42,7 +42,7 @@ export const addPatient = async (req, res) => {
       bedType,
       assignedBed: availableBed._id,
       admittedAt: new Date(),
-      bedHistory: [
+      history: [
         {
           bedType: bedType,
           admittedAt: new Date(),
@@ -130,12 +130,12 @@ export const dischargepatient=async(req,res)=>{
 
     let totalCost = 0;
 
-    for (const history of bed.history) {
-      if (String(history.patient) === String(patient._id)) {
+    for (const history of patient.bedHistory) {
+      if (history.dischargedAt) {
         const startDate = new Date(history.admittedAt);
-        const endDate = history.dischargedAt ? new Date(history.dischargedAt) : dischargeDate;
-        const daysStayed = Math.max(1,Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24))); // Convert ms to days
-        totalCost += daysStayed * (BED_COSTS[bed.type] || 100); // Get cost per day
+        const endDate = new Date(history.dischargedAt);
+        const daysStayed = Math.max(1, Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24))); // Convert ms to days
+        totalCost += daysStayed * (BED_COSTS[history.bedType] || 100);
       }
     }
 
