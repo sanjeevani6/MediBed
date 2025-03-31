@@ -6,10 +6,10 @@ import http from 'http';
 import { Server as SocketServer } from 'socket.io';
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/authRoutes.js";
-import addstaffroute from "./routes/staff.js"
-import doctorRoute from "./routes/doctor.js"
-import patientRoute from "./routes/patientRoutes.js"
-import bedRoutes from "./routes/bedRoutes.js"
+import addstaffroute from "./routes/staff.js";
+import doctorRoute from "./routes/doctor.js";
+import patientRoute from "./routes/patientRoutes.js";
+import bedRoutes from "./routes/bedRoutes.js";
 import groupRouter from "./routes/groupRoutes.js";
 import messageRouter from "./routes/messageRoutes.js";
 
@@ -23,9 +23,9 @@ const server = http.createServer(app);
 // Connect to MongoDB
 connectDB();
 
-// Middleware
+// Middleware (Ensure it's only added once)
 app.use(cors({
-    origin: "http://localhost:5173", // Ensure this matches your frontend
+    origin: "http://localhost:5173", // Allow only your frontend
     credentials: true, 
 }));
 app.use(express.json());
@@ -97,7 +97,7 @@ io.on('connection', (socket) => {
     });
 });
 
-// Routes
+// Routes (Define only once)
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/staff", addstaffroute);
 app.use("/api/v1/doctor", doctorRoute);
@@ -106,5 +106,6 @@ app.use("/api/v1/beds", bedRoutes);
 app.use("/api/groups", groupRouter);
 app.use("/api/messages", messageRouter);
 
+// Set port correctly
 const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

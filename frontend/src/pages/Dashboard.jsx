@@ -65,6 +65,13 @@ const Dashboard = () => {
                 Add Doctor
               </li>
             )}
+
+        {user?.role === "superadmin" && (
+          <li onClick={() => navigate("/add-bed")} className="clickable">
+            Add Bed
+          </li>
+        )}
+
             <li onClick={() => navigate("/add-patient")} className="clickable">
                 Add Patient
               </li>

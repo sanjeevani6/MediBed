@@ -17,7 +17,10 @@ const generateAccessToken = (user) => {
 /**
  * Verifies Refresh Token and issues a new Access Token
  */
-const verifyAndRefreshToken = (refreshToken,req, res, next, attachToRequest = true) => {
+const verifyAndRefreshToken = (req, res, next) => { // ✅ Added `req` as a parameter
+  const refreshToken = req.cookies.refreshToken;
+  if (!refreshToken) return res.status(401).json({ message: "No refresh token provided" });
+
   jwt.verify(refreshToken, REFRESH_SECRET, (err, decoded) => {
     if (err) return res.status(403).json({ message: "Invalid refresh token" });
 
@@ -30,7 +33,7 @@ const verifyAndRefreshToken = (refreshToken,req, res, next, attachToRequest = tr
       maxAge: 15 * 60 * 1000, // 15 min
     });
 
-    if (attachToRequest) req.user = decoded; // Attach user info
+    req.user = decoded; // ✅ Attach user info to `req`
     next();
   });
 };
@@ -41,7 +44,7 @@ export const authMiddleware = async(req, res, next) => {
 
   if (!accessToken) {
     if (!refreshToken) return res.status(401).json({ message: "Access denied" });
-    return verifyAndRefreshToken(refreshToken, req,res, next);
+    return verifyAndRefreshToken(req, res, next); // ✅ Now passing `req`
   }
 
   try {
@@ -51,8 +54,6 @@ export const authMiddleware = async(req, res, next) => {
     next();
   } catch (error) {
     if (!refreshToken) return res.status(401).json({ message: "Session expired, please log in again" });
-    return verifyAndRefreshToken(refreshToken,req, res, next);
+    return verifyAndRefreshToken(req, res, next); // ✅ Now passing `req`
   }
 };
-
-

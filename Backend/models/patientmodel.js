@@ -24,10 +24,17 @@ const patientSchema = new mongoose.Schema(
     bedType: { type: String, enum: ["ICU", "General", "Regular"], required: true },
     assignedBed: { type: mongoose.Schema.Types.ObjectId, ref: "Bed", default: null },
     admittedAt: { type: Date, default: Date.now },
-    
+    totalCost: { type: Number, default: 0 }, // Stores total cost for patient stay
+    bedHistory: [
+      {
+        bedType: { type: String, required: true },
+        admittedAt: { type: Date, required: true },
+        dischargedAt: { type: Date, required: true },
+      }
+    ],
   },
   { collection: "patients", timestamps: true }, // Ensure correct collection name
-  { timestamps: true } // Adds createdAt and updatedAt fields automatically
+  // { timestamps: true } // Adds createdAt and updatedAt fields automatically
 );
 
 export  const Patient = mongoose.model("Patient", patientSchema);
