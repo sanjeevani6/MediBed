@@ -39,7 +39,7 @@ import{
         //fetch messages
         fetchMessages();
         socket.emit("join room", selectedGroup?._id);
-        socket.on("message receive", (newMessage) => {
+        socket.on("message received", (newMessage) => {
           setMessages((prev) => [...prev, newMessage]);
         });
   
@@ -169,7 +169,7 @@ import{
         setIsTyping(true);
         socket.emit("typing", {
           groupId: selectedGroup?._id,
-          name: currentUser?.staff?.name,
+          name: currentUser?.name,
         });
       }
       //clear existing timeout
@@ -202,19 +202,19 @@ import{
         <Box
           key={name}
           alignSelf={
-            name === currentUser?.staff?.name ? "flex-start" : "flex-end"
+            name === currentUser?.name ? "flex-start" : "flex-end"
           }
           maxW="70%"
         >
           <Flex
             align="center"
-            bg={name === currentUser?.staff?.name ? "blue.50" : "gray.50"}
+            bg={name === currentUser?.name ? "blue.50" : "gray.50"}
             p={2}
             borderRadius="lg"
             gap={2}
           >
             {/* current user (You) -left side */}
-            {name === currentUser?.staff?.name ? (
+            {name === currentUser?.name ? (
               <>
                 <Avatar size="xs" name={name} />
                 <Flex align="center" gap={1}>
@@ -366,7 +366,7 @@ import{
                   <Box
                     key={message._id}
                     alignSelf={
-                      message.sender._id === currentUser?.staff?._id
+                      message.sender._id === currentUser?._id
                         ? "flex-start"
                         : "flex-end"
                     }
@@ -377,13 +377,13 @@ import{
                         align="center"
                         mb={1}
                         justifyContent={
-                          message.sender._id === currentUser?.staff?._id
+                          message.sender._id === currentUser?._id
                             ? "flex-start"
                             : "flex-end"
                         }
                         gap={2}
                       >
-                        {message.sender._id === currentUser?.staff?._id ? (
+                        {message.sender._id === currentUser?._id ? (
                           <>
                             <Avatar size="xs" name={message.sender.name} />
                             <Text fontSize="xs" color="gray.500">
@@ -403,12 +403,12 @@ import{
   
                       <Box
                         bg={
-                          message?.sender._id === currentUser?.staff?._id
+                          message?.sender._id === currentUser?._id
                             ? "blue.500"
                             : "white"
                         }
                         color={
-                          message?.sender._id === currentUser?.staff?._id
+                          message?.sender._id === currentUser?._id
                             ? "white"
                             : "gray.800"
                         }
