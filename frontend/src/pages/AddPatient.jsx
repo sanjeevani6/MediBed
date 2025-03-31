@@ -18,6 +18,9 @@ const AddPatient = ({ user }) => {
 
   const [error, setError] = useState("");
   const [showPopup, setShowPopup] = useState(false);
+  const [showEmailForm, setShowEmailForm] = useState(false);
+  const [patientEmail, setPatientEmail] = useState("");
+  const [patientDetails, setPatientDetails] = useState(null);
 
   // Ensure only logged-in users can access
   if (!user) {
@@ -26,6 +29,9 @@ const AddPatient = ({ user }) => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+  const handlePatientEmailChange = (e) => {
+    setPatientEmail(e.target.value);
   };
 
   const handleSubmit = async (e) => {
@@ -41,13 +47,50 @@ const AddPatient = ({ user }) => {
       }
 
       // Show success pop-up
-      setShowPopup(true);
-      setTimeout(() => {
-        setShowPopup(false);
-        navigate("/dashboard"); // Redirect to dashboard
-      }, 3000);
+      // setShowPopup(true);
+      // setTimeout(() => {
+      //   setShowPopup(false);
+      //   navigate("/dashboard"); // Redirect to dashboard
+      // }, 3000);
+      // Save the patient details to include in the email later
+      setPatientDetails(response.data.patient || formData);
+      // Show email form so the user can provide patient's email address
+      setShowEmailForm(true);
     } catch (error) {
       setError(error.response?.data?.message || "Failed to add patient.");
+    }
+  };
+
+
+  const handleEmailSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    // Construct a message with patient details
+    const messageContent = `
+      Patient Details:
+      Name: ${patientDetails.name}
+      Age: ${patientDetails.age}
+      Weight: ${patientDetails.weight}
+      Phone: ${patientDetails.phoneNumber}
+      Blood Group: ${patientDetails.bloodGroup}
+      Address: ${patientDetails.address}
+      Status: ${patientDetails.status}
+      Severity: ${patientDetails.severity}
+      Bed Type: ${patientDetails.bedType}
+    `;
+    try {
+      // Send a request to your email endpoint
+      await axios.post(
+        "http://localhost:8080/send-email",
+        { email: patientEmail, message: messageContent },
+        { withCredentials: true }
+      );
+      // Optionally show a success message and redirect after a delay
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 3000);
+    } catch (error) {
+      setError(error.response?.data?.message || "Failed to send email.");
     }
   };
 
@@ -55,41 +98,112 @@ const AddPatient = ({ user }) => {
     <div className="add-patient-container">
       <h2>Add Patient</h2>
       {error && <p className="error">{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <input type="text" name="name" placeholder="Patient's Name" value={formData.name} onChange={handleChange} required />
-        <input type="number" name="age" placeholder="Age" value={formData.age} onChange={handleChange} required />
-        <input type="number" name="weight" placeholder="Weight (kg)" value={formData.weight} onChange={handleChange} required />
-        <input type="text" name="phoneNumber" placeholder="Phone Number" value={formData.phoneNumber} onChange={handleChange} required />
-        
-        <select name="bloodGroup" value={formData.bloodGroup} onChange={handleChange} required>
-          {["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"].map((group) => (
-            <option key={group} value={group}>{group}</option>
-          ))}
-        </select>
-        
-        <input type="text" name="address" placeholder="Address" value={formData.address} onChange={handleChange} required />
-        
-        <select name="status" value={formData.status} onChange={handleChange} required>
-          <option value="ADMITTED">Admitted</option>
-          <option value="DISCHARGED">Discharged</option>
-        </select>
-        
-        <select name="severity" value={formData.severity} onChange={handleChange} required>
-          <option value="1">Low</option>
-          <option value="2">Moderate</option>
-          <option value="3">Critical</option>
-        </select>
-        
-        <select name="bedType" value={formData.bedType} onChange={handleChange} required>
-          <option value="Regular">Regular</option>
-          <option value="General">General</option>
-          <option value="ICU">ICU</option>
-        </select>
-        
-        <button type="submit">Add Patient</button>
-      </form>
-      
-      {showPopup && <p className="success-popup">Patient added successfully!</p>}
+       {/* Patient Details Form */}
+       {!showEmailForm && (
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="name"
+            placeholder="Patient's Name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="number"
+            name="age"
+            placeholder="Age"
+            value={formData.age}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="number"
+            name="weight"
+            placeholder="Weight (kg)"
+            value={formData.weight}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="text"
+            name="phoneNumber"
+            placeholder="Phone Number"
+            value={formData.phoneNumber}
+            onChange={handleChange}
+            required
+          />
+          <select
+            name="bloodGroup"
+            value={formData.bloodGroup}
+            onChange={handleChange}
+            required
+          >
+            {["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"].map(
+              (group) => (
+                <option key={group} value={group}>
+                  {group}
+                </option>
+              )
+            )}
+          </select>
+          <input
+            type="text"
+            name="address"
+            placeholder="Address"
+            value={formData.address}
+            onChange={handleChange}
+            required
+          />
+          <select
+            name="status"
+            value={formData.status}
+            onChange={handleChange}
+            required
+          >
+            <option value="ADMITTED">Admitted</option>
+            <option value="DISCHARGED">Discharged</option>
+          </select>
+          <select
+            name="severity"
+            value={formData.severity}
+            onChange={handleChange}
+            required
+          >
+            <option value="1">Low</option>
+            <option value="2">Moderate</option>
+            <option value="3">Critical</option>
+          </select>
+          <select
+            name="bedType"
+            value={formData.bedType}
+            onChange={handleChange}
+            required
+          >
+            <option value="Regular">Regular</option>
+            <option value="General">General</option>
+            <option value="ICU">ICU</option>
+          </select>
+          <button type="submit">Add Patient</button>
+        </form>
+      )}
+
+      {/* Email Form */}
+      {showEmailForm && (
+        <form onSubmit={handleEmailSubmit}>
+          <h3>Patient added successfully!</h3>
+          <p>Please enter the patient’s email address to send the details:</p>
+          <input
+            type="email"
+            name="patientEmail"
+            placeholder="Patient's Email"
+            value={patientEmail}
+            onChange={handlePatientEmailChange}
+            required
+          />
+          <button type="submit">Send Email</button>
+        </form>
+      )}
     </div>
   );
 };

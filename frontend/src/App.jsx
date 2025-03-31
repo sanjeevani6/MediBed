@@ -50,6 +50,7 @@ const App = () => {
         <Route path="/staff-list" element={<StaffList user={user} />} />
         <Route path="/doctor-list" element={<DoctorList user={user} />} />
         <Route path="/add-staff" element={<AddStaff user={user} />} />
+        
         <Route path="/add-doctor" element={<AddDoctor user={user} />} />
         <Route path="/add-patient" element={<AddPatient user={user} />} />
         <Route path="/patients" element={<PatientList />} />

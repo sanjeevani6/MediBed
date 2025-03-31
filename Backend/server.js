@@ -12,6 +12,7 @@ import patientRoute from "./routes/patientRoutes.js";
 import bedRoutes from "./routes/bedRoutes.js";
 import groupRouter from "./routes/groupRoutes.js";
 import messageRouter from "./routes/messageRoutes.js";
+import { sendEmail } from "./utils/sendEmail.js";
 
 // Load environment variables
 dotenv.config();
@@ -28,6 +29,8 @@ app.use(cors({
     origin: "http://localhost:5173", // Allow only your frontend
     credentials: true, 
 }));
+app.use(express.static("public"));
+app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -105,6 +108,16 @@ app.use("/api/v1/patients", patientRoute);
 app.use("/api/v1/beds", bedRoutes);
 app.use("/api/groups", groupRouter);
 app.use("/api/messages", messageRouter);
+app.post("/send-email", async (req, res) => {
+    const { email, message } = req.body;
+    try {
+      await sendEmail(email, message);
+      res.status(200).json({ status: "success", message: "Email sent successfully" });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ status: "error", message: "Error sending email" });
+    }
+});
 
 // Set port correctly
 const PORT = process.env.PORT || 8080;
