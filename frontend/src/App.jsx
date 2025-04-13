@@ -42,26 +42,25 @@ const App = () => {
 
   return (
     <ChakraProvider>
-    <Router>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<PrivateRoute user={user}><Dashboard /></PrivateRoute>} />
-        <Route path="/staff-list" element={<StaffList user={user} />} />
-        <Route path="/doctor-list" element={<DoctorList user={user} />} />
-        <Route path="/add-staff" element={<AddStaff user={user} />} />
-        
-        <Route path="/add-doctor" element={<AddDoctor user={user} />} />
-        <Route path="/add-patient" element={<AddPatient user={user} />} />
-        <Route path="/patients" element={<PatientList />} />
-        <Route path="/patients/:id" element={<PatientDetail />} />
-        <Route path="/beds" element={<BedList />} />
-        <Route path="/beds/:id" element={<BedDetail />} />
-        <Route path="/add-bed" element={<AddBed user={user} />} />
+      <Router>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/dashboard" element={<PrivateRoute user={user}><Dashboard /></PrivateRoute>} />
+          <Route path="/staff-list" element={<PrivateRoute user={user}><StaffList user={user} /></PrivateRoute>} />
+          <Route path="/doctor-list" element={<PrivateRoute user={user}><DoctorList user={user} /></PrivateRoute>} />
+          <Route path="/add-staff" element={<PrivateRoute user={user}><AddStaff user={user} /></PrivateRoute>} />
+          <Route path="/add-doctor" element={<PrivateRoute user={user}><AddDoctor user={user} /></PrivateRoute>} />
+          <Route path="/add-patient" element={<PrivateRoute user={user}><AddPatient user={user} /></PrivateRoute>} />
+          <Route path="/patients" element={<PrivateRoute user={user}><PatientList /></PrivateRoute>} />
+          <Route path="/patients/:id" element={<PrivateRoute user={user}><PatientDetail /></PrivateRoute>} />
+          <Route path="/beds" element={<PrivateRoute user={user}><BedList /></PrivateRoute>} />
+          <Route path="/beds/:id" element={<PrivateRoute user={user}><BedDetail /></PrivateRoute>} />
+          <Route path="/add-bed" element={<PrivateRoute user={user}><AddBed user={user} /></PrivateRoute>} />
+          <Route path="/chat" element={<PrivateRoute user={user}><Chat /></PrivateRoute>} />
 
-        <Route path="/chat" element={<Chat />} />
-      </Routes>
-    </Router>
+        </Routes>
+      </Router>
     </ChakraProvider>
   );
 };

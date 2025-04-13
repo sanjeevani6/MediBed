@@ -64,19 +64,54 @@ const PatientDetail = () => {
 
       {/* Severity Trend Graph */}
       <h3>Severity Trend</h3>
-      {patient.severityHistory.length > 0 ? (
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={patient.severityHistory}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="timestamp" tickFormatter={(time) => new Date(time).toLocaleDateString()} />
-            <YAxis domain={[1, 3]} tickFormatter={(value) => (value === 1 ? "Low" : value === 2 ? "Moderate" : "Critical")} />
-            <Tooltip />
-            <Line type="monotone" dataKey="severity" stroke="#ff7300" />
-          </LineChart>
-        </ResponsiveContainer>
-      ) : (
-        <p>No severity history available.</p>
-      )}
+{patient.severityHistory.length > 0 ? (
+  <ResponsiveContainer width="100%" height={300}>
+    <LineChart data={patient.severityHistory}>
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis
+        dataKey="timestamp"
+        tickFormatter={(time) => new Date(time).toLocaleDateString()}
+      />
+      <YAxis
+        dataKey="severity"
+        type="number"
+        domain={[1, 3]}
+        ticks={[1, 2, 3]}
+        tickFormatter={(value) => {
+          switch (value) {
+            case 1:
+              return "Low";
+            case 2:
+              return "Moderate";
+            case 3:
+              return "Critical";
+            default:
+              return value;
+          }
+        }}
+      />
+      <Tooltip
+        formatter={(value, name) => {
+          if (name === "severity") {
+            return value === 1
+              ? "Low"
+              : value === 2
+              ? "Moderate"
+              : value === 3
+              ? "Critical"
+              : value;
+          }
+          return value;
+        }}
+        labelFormatter={(label) => new Date(label).toLocaleString()}
+      />
+      <Line type="monotone" dataKey="severity" stroke="#ff7300" />
+    </LineChart>
+  </ResponsiveContainer>
+) : (
+  <p>No severity history available.</p>
+)}
+
 
  {/* Display Notes for Each Severity Change */}
  <div>
