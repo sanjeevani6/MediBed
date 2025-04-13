@@ -72,24 +72,27 @@ const PatientDetail = () => {
         dataKey="timestamp"
         tickFormatter={(time) => new Date(time).toLocaleDateString()}
       />
-      <YAxis
-        dataKey="severity"
-        type="number"
-        domain={[1, 3]}
-        ticks={[1, 2, 3]}
-        tickFormatter={(value) => {
-          switch (value) {
-            case 1:
-              return "Low";
-            case 2:
-              return "Moderate";
-            case 3:
-              return "Critical";
-            default:
-              return value;
-          }
-        }}
-      />
+    <YAxis
+  dataKey="severity"
+  type="number"
+  domain={[1, 3]}
+  ticks={[1, 2, 3]}
+  tickFormatter={(value) => {
+    switch (value) {
+      case 1:
+        return "Low";
+      case 2:
+        return "Moderate";
+      case 3:
+        return "Critical";
+      default:
+        return value;
+    }
+  }}
+  tick={{ fontSize: 14 }}  //  Makes text clearer
+  width={70}             //  Gives enough space for full labels
+/>
+
       <Tooltip
         formatter={(value, name) => {
           if (name === "severity") {
