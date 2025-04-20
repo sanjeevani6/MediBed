@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useToast } from "@chakra-ui/react";
 
 const AddPatient = ({ user }) => {
   const navigate = useNavigate();
+  const toast = useToast();
   const [formData, setFormData] = useState({
     name: "",
     age: "",
@@ -63,29 +65,29 @@ const AddPatient = ({ user }) => {
 
     const patient = response.data.patient || formData;
 
-    // Construct email message
-    const messageContent = `
-      Patient Details:
-      Name: ${patient.name}
-      Age: ${patient.age}
-      Weight: ${patient.weight}
-      Phone: ${patient.phoneNumber}
-      Blood Group: ${patient.bloodGroup}
-      Address: ${patient.address}
-      Status: ${patient.status}
-      Severity: ${patient.severity}
-      Bed Type: ${patient.bedType}
-    `;
+    // // Construct email message
+    // const messageContent = `
+    //   Patient Details:
+    //   Name: ${patient.name}
+    //   Age: ${patient.age}
+    //   Weight: ${patient.weight}
+    //   Phone: ${patient.phoneNumber}
+    //   Blood Group: ${patient.bloodGroup}
+    //   Address: ${patient.address}
+    //   Status: ${patient.status}
+    //   Severity: ${patient.severity}
+    //   Bed Type: ${patient.bedType}
+    // `;
 
-    // Send email
-    await axios.post(
-      "http://localhost:8080/send-email",
-      {
-        email: patient.email, // ✅ send the email
-        message: messageContent,
-      },
-      { withCredentials: true }
-    );
+    // // Send email
+    // await axios.post(
+    //   "http://localhost:8080/send-email",
+    //   {
+    //     email: patient.email, // ✅ send the email
+    //     message: messageContent,
+    //   },
+    //   { withCredentials: true }
+    // );
 
     // Optional: Redirect
     setTimeout(() => {
@@ -98,37 +100,37 @@ const AddPatient = ({ user }) => {
   };
 
 
-  const handleEmailSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    // Construct a message with patient details
-    const messageContent = `
-      Patient Details:
-      Name: ${patientDetails.name}
-      Age: ${patientDetails.age}
-      Weight: ${patientDetails.weight}
-      Phone: ${patientDetails.phoneNumber}
-      Blood Group: ${patientDetails.bloodGroup}
-      Address: ${patientDetails.address}
-      Status: ${patientDetails.status}
-      Severity: ${patientDetails.severity}
-      Bed Type: ${patientDetails.bedType}
-    `;
-    try {
-      // Send a request to your email endpoint
-      await axios.post(
-        "http://localhost:8080/send-email",
-        { email: patientEmail, message: messageContent },
-        { withCredentials: true }
-      );
-      // Optionally show a success message and redirect after a delay
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 3000);
-    } catch (error) {
-      setError(error.response?.data?.message || "Failed to send email.");
-    }
-  };
+  // const handleEmailSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setError("");
+  //   // Construct a message with patient details
+  //   const messageContent = `
+  //     Patient Details:
+  //     Name: ${patientDetails.name}
+  //     Age: ${patientDetails.age}
+  //     Weight: ${patientDetails.weight}
+  //     Phone: ${patientDetails.phoneNumber}
+  //     Blood Group: ${patientDetails.bloodGroup}
+  //     Address: ${patientDetails.address}
+  //     Status: ${patientDetails.status}
+  //     Severity: ${patientDetails.severity}
+  //     Bed Type: ${patientDetails.bedType}
+  //   `;
+  //   try {
+  //     // Send a request to your email endpoint
+  //     await axios.post(
+  //       "http://localhost:8080/send-email",
+  //       { email: patientEmail, message: messageContent },
+  //       { withCredentials: true }
+  //     );
+  //     // Optionally show a success message and redirect after a delay
+  //     setTimeout(() => {
+  //       navigate("/dashboard");
+  //     }, 3000);
+  //   } catch (error) {
+  //     setError(error.response?.data?.message || "Failed to send email.");
+  //   }
+  // };
 
   return (
     <div className="add-patient-container">

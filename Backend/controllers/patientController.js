@@ -188,7 +188,34 @@ export const dischargepatient=async(req,res)=>{
     await patient.save();
     await bed.save();
 
-    res.json({ message: "Patient discharged, bed updated", patient, bed,totalCost });
+    const emailContent = `
+    Dear ${patient.name},
+
+    Patient Details:
+    - Name: ${patient.name}
+    - Age: ${patient.age}
+    - Blood Group: ${patient.bloodGroup}
+    - Address: ${patient.address}
+    - Bed Type: ${bed.type}
+    - Admission Date: ${new Date(patient.admittedAt).toLocaleDateString()}
+    - Discharge Date: ${dischargeDate.toLocaleDateString()}
+
+    Bed History:
+    ${patient.bedHistory.map((history, index) => `
+      ${index + 1}. Bed Type: ${history.bedType}, Admitted: ${new Date(history.admittedAt).toLocaleDateString()}, Discharged: ${history.dischargedAt ? new Date(history.dischargedAt).toLocaleDateString() : "N/A"}
+    `).join("\n")}
+
+    Total Stay Cost: Rs: ${totalCost}
+
+
+    Regards,
+    MediBed Hospital
+  `;
+
+  // Send email with the discharge details
+  await sendEmail(patient.email, emailContent);
+
+    res.json({ message: "Patient discharged, bed updated, email sent!", patient, bed,totalCost });
   } catch (error) {
     res.status(500).json({ error: "Server Error" });
   }
