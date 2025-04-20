@@ -6,6 +6,11 @@ const patientSchema = new mongoose.Schema(
     age: { type: Number, required: true },
     weight: { type: Number, required: true }, // Weight in kg
     phoneNumber: { type: String, required: true },
+    email: {
+      type: String,
+      required: true,
+      match: [/.+\@.+\..+/, 'Please fill a valid email address'],
+    },    
     bloodGroup: { 
       type: String, 
       enum: ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"], 

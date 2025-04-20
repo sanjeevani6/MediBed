@@ -11,6 +11,7 @@ const AddPatient = ({ user }) => {
     phoneNumber: "",
     bloodGroup: "A+",
     address: "",
+    email:"",
     status: "ADMITTED",
     severity: "1",
     bedType: "Regular",
@@ -46,19 +47,54 @@ const AddPatient = ({ user }) => {
         return;
       }
 
-      // Show success pop-up
-      // setShowPopup(true);
-      // setTimeout(() => {
-      //   setShowPopup(false);
-      //   navigate("/dashboard"); // Redirect to dashboard
-      // }, 3000);
-      // Save the patient details to include in the email later
-      setPatientDetails(response.data.patient || formData);
-      // Show email form so the user can provide patient's email address
-      setShowEmailForm(true);
-    } catch (error) {
-      setError(error.response?.data?.message || "Failed to add patient.");
-    }
+    //   // Show success pop-up
+    //   // setShowPopup(true);
+    //   // setTimeout(() => {
+    //   //   setShowPopup(false);
+    //   //   navigate("/dashboard"); // Redirect to dashboard
+    //   // }, 3000);
+    //   // Save the patient details to include in the email later
+    //   setPatientDetails(response.data.patient || formData);
+    //   // Show email form so the user can provide patient's email address
+    //   setShowEmailForm(true);
+    // } catch (error) {
+    //   setError(error.response?.data?.message || "Failed to add patient.");
+    // }
+
+    const patient = response.data.patient || formData;
+
+    // Construct email message
+    const messageContent = `
+      Patient Details:
+      Name: ${patient.name}
+      Age: ${patient.age}
+      Weight: ${patient.weight}
+      Phone: ${patient.phoneNumber}
+      Blood Group: ${patient.bloodGroup}
+      Address: ${patient.address}
+      Status: ${patient.status}
+      Severity: ${patient.severity}
+      Bed Type: ${patient.bedType}
+    `;
+
+    // Send email
+    await axios.post(
+      "http://localhost:8080/send-email",
+      {
+        email: patient.email, // ✅ send the email
+        message: messageContent,
+      },
+      { withCredentials: true }
+    );
+
+    // Optional: Redirect
+    setTimeout(() => {
+      navigate("/dashboard");
+    }, 3000);
+  } catch (error) {
+    setError(error.response?.data?.message || "Failed to add patient or send email.");
+  }
+
   };
 
 
@@ -133,6 +169,7 @@ const AddPatient = ({ user }) => {
             onChange={handleChange}
             required
           />
+
           <select
             name="bloodGroup"
             value={formData.bloodGroup}
@@ -183,13 +220,38 @@ const AddPatient = ({ user }) => {
             <option value="Regular">Regular</option>
             <option value="General">General</option>
             <option value="ICU">ICU</option>
+            
           </select>
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+
           <button type="submit">Add Patient</button>
         </form>
       )}
 
       {/* Email Form */}
-      {showEmailForm && (
+
+      {/* const handleSubmit = async () => {
+  await axios.post("/api/v1/patients", {
+    name,
+    age,
+    weight,
+    phoneNumber,
+    bloodGroup,
+    address,
+    severity,
+    bedType,
+    email, // ✅ send it
+  });
+}; */}
+
+      {/* {showEmailForm && (
         <form onSubmit={handleEmailSubmit}>
           <h3>Patient added successfully!</h3>
           <p>Please enter the patient’s email address to send the details:</p>
@@ -203,7 +265,7 @@ const AddPatient = ({ user }) => {
           />
           <button type="submit">Send Email</button>
         </form>
-      )}
+      )} */}
     </div>
   );
 };

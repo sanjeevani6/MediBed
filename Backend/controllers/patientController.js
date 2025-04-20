@@ -1,6 +1,8 @@
 import { Patient } from "../models/patientmodel.js";
 import Bed from "../models/bedmodel.js";
 import { BED_COSTS } from "../constants/bedCosts.js";
+import { sendEmail } from "../utils/sendEmail.js";  // Update the path as necessary
+
 
 // to add patient
 export const addPatient = async (req, res) => {
@@ -15,6 +17,7 @@ export const addPatient = async (req, res) => {
       status,
       severity,
       bedType,
+      email,
     } = req.body;
     console.log("request body",req.body);
      // Check for an available bed of the requested type
@@ -40,6 +43,7 @@ export const addPatient = async (req, res) => {
       status,
       severity,
       bedType,
+      email,
       assignedBed: availableBed._id,
       admittedAt: new Date(),
       history: [
@@ -71,7 +75,28 @@ export const addPatient = async (req, res) => {
   
       // Save bed allocation
       await availableBed.save();
-    res.status(201).json({ message: "Patient added successfully and bed allocated!",
+
+      const messageContent = `
+      Dear ${newPatient.name},
+      Name: ${newPatient.name}
+      Age: ${newPatient.age}
+      Weight: ${newPatient.weight}
+      Phone: ${newPatient.phoneNumber}
+      Blood Group: ${newPatient.bloodGroup}
+      Address: ${newPatient.address}
+      Bed Type: ${newPatient.bedType}
+      Severity: ${newPatient.severity}
+      Status: ${newPatient.status}
+      Admission Date: ${new Date(newPatient.admittedAt).toLocaleDateString()}
+
+      Regards,
+      MediBed Hospital
+    `;
+
+    await sendEmail(newPatient.email, messageContent);
+
+
+    res.status(201).json({ message: "Patient added successfully and bed allocated, email sent!",
        patient: newPatient,
        allocatedBed: availableBed,
        });
