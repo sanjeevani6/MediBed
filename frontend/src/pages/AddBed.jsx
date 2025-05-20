@@ -11,12 +11,19 @@ const AddBed = ({ user }) => {
   const [error, setError] = useState("");
   const [showPopup, setShowPopup] = useState(false);
 
-  // Ensure only superadmins can access this page
   if (!user) {
-    return <p className="error-message">YOU NEED TO BE LOGGED IN</p>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-red-600 text-lg font-semibold">YOU NEED TO BE LOGGED IN</p>
+      </div>
+    );
   }
   if (user.role !== "superadmin") {
-    return <p className="error-message">Only superadmins can add beds.</p>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-red-600 text-lg font-semibold">Only superadmins can add beds.</p>
+      </div>
+    );
   }
 
   const handleChange = (e) => {
@@ -27,38 +34,60 @@ const AddBed = ({ user }) => {
     e.preventDefault();
     try {
       await axios.post("/api/v1/beds/add", formData, { withCredentials: true });
-
-      // Show success pop-up
       setShowPopup(true);
       setTimeout(() => {
         setShowPopup(false);
-        navigate("/beds"); // Redirect to beds page
-      }, 2000);
+        navigate("/beds");
+      }, 3000);
     } catch (error) {
       setError(error.response?.data?.message || "Failed to add bed.");
     }
   };
 
   return (
-    <div className="add-bed-container">
-      <h2>Add Bed</h2>
-      {error && <p className="error">{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="bedNumber"
-          placeholder="Bed Number"
-          onChange={handleChange}
-          required
-        />
-        <select name="type" value={formData.type} onChange={handleChange}>
-          <option value="General">General</option>
-          <option value="ICU">ICU</option>
-          <option value="Regular">Regular</option>
-        </select>
-        <button type="submit">Add Bed</button>
-      </form>
-      {showPopup && <p className="success-popup">Bed added successfully!</p>}
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+      <div className="bg-white shadow-lg rounded-xl p-15 w-full max-w-lg font-bold">
+        <div className="text-2xl font-bold text-gray-500 mb-8 text-center py-3 px-10">
+          Add Bed
+        </div>
+
+        {error && (
+          <p className="text-red-500 text-sm mb-4 text-center font-semibold">{error}</p>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <input
+            type="text"
+            name="bedNumber"
+            placeholder="Bed Number"
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-3 border border-gray-300 rounded-md text-lg"
+          />
+
+          <select
+            name="type"
+            value={formData.type}
+            onChange={handleChange}
+            className="w-full px-4 py-3 bg-white border-2 border-gray-500 rounded-md text-lg"
+            style={{ border: "1px solid rgb(199, 200, 202)", borderRadius: "0.375rem" }}
+          >
+            <option value="General">General</option>
+            <option value="ICU">ICU</option>
+            <option value="Regular">Regular</option>
+          </select>
+
+          <button type="submit" className="button">
+            Add Bed
+          </button>
+        </form>
+
+        {showPopup && (
+          <div className="mt-4 bg-green-100 text-green-700 p-3 rounded text-center text-sm font-semibold">
+            Bed added successfully! Redirecting...
+          </div>
+        )}
+      </div>
     </div>
   );
 };

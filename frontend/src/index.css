@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+
 /** login page **/
 .login-container {
   width: 100%;
@@ -37,22 +38,36 @@ input {
   width: 100%;
 }
 
-button {
-  background: #d4e4f6;
+.button {
+  background: #2db66d;
   color: black;
-  padding: 10px;
+  padding: 8px;
   font-size: 25px;
+  font-weight: 400;
   border: 1px solid rgb(205, 196, 185);
   border-radius: 7px;
   cursor: pointer;
   transition: 0.3s;
 }
 
-button:hover {
-  background: #2db66d;
+.button:hover {
+  background: #208650;
   /* border:2px solid rgb(36, 92, 247) */
 }
+.login-button {
+  background-color: #007bff; /* Bootstrap blue */
+  color: white;
+  font-weight: 600;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
+.login-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
 .error-message {
   color: red;
   font-weight: bold;

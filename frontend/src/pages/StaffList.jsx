@@ -52,13 +52,10 @@ import { useEffect, useState } from "react";
  
    return (
      <div className="p-6 max-w-6xl mx-auto">
-       <h2 >Staff List</h2>
-       <button
-           onClick={() => navigate("/dashboard")}
-           className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-all duration-300 ml-4"
-         >
-           Back to Dashboard
-         </button>
+      <div className="text-2xl font-bold text-gray-500 mb-8 text-center py-2 px-10">
+          STAFF LIST
+        </div>
+     
  
        {/* Search Bar & Filters in One Row */}
        <div className="flex items-center justify-between bg-gray-100 p-4 rounded-lg mb-6 shadow-sm">
@@ -71,7 +68,7 @@ import { useEffect, useState } from "react";
    />
    
    <div className="flex items-center gap-4">
-     <label className="flex items-center gap-2 text-gray-700">
+     <label className="flex items-center gap-1 text-gray-700 px-2">
        <input
          type="checkbox"
          checked={filterSuperadmin}
@@ -81,7 +78,7 @@ import { useEffect, useState } from "react";
        Superadmin
      </label>
  
-     <label className="flex items-center gap-2 text-gray-700">
+     <label className="flex items-center gap-1 text-gray-700">
        <input
          type="checkbox"
          checked={filterStaff}

@@ -38,7 +38,9 @@ import { useEffect, useState } from "react";
  
    return (
      <div className="list-container p-4">
-       <h2 className="text-xl font-semibold mb-4">Doctor List</h2>
+  <div className="text-2xl font-bold text-gray-500 mb-8 text-center py-2 px-10">
+          DOCTOR'S LIST
+        </div>
        <div className="flex items-center space-x-4 mb-4">
          {/* Search Input */}
          <input
@@ -49,17 +51,11 @@ import { useEffect, useState } from "react";
            className="w-1/3 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-8080 focus:border-blue-8080 transition-all duration-300"
          />
  
-         {/* Back to Dashboard Button */}
-         <button
-           onClick={() => navigate("/dashboard")}
-           className="px-4 py-2 bg-blue-8080 text-white rounded-lg shadow hover:bg-blue-600 transition duration-300"
-         >
-           Back to Dashboard
-         </button>
+      
        </div>
  
        {/* Doctor Cards */}
-       <div className="card-container">
+       <div className="card-container py-2">
          {filteredDoctors.length > 0 ? (
            filteredDoctors.map((doctor) => (
              <div key={doctor._id} className="card">

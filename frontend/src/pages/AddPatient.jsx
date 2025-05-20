@@ -17,14 +17,16 @@ const AddPatient = ({ user }) => {
   });
 
   const [error, setError] = useState("");
-  const [showPopup, setShowPopup] = useState(false);
   const [showEmailForm, setShowEmailForm] = useState(false);
   const [patientEmail, setPatientEmail] = useState("");
   const [patientDetails, setPatientDetails] = useState(null);
 
-  // Ensure only logged-in users can access
   if (!user) {
-    return <p className="error-message">YOU NEED TO BE LOGGED IN</p>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-red-600 text-lg font-semibold">YOU NEED TO BE LOGGED IN</p>
+      </div>
+    );
   }
 
   const handleChange = (e) => {
@@ -36,9 +38,8 @@ const AddPatient = ({ user }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // Reset error before request
+    setError("");
     try {
-      console.log("formData",formData);
       const response = await axios.post("/api/v1/patients/add-patients", formData, { withCredentials: true });
 
       if (response.data?.message.includes("No vacant")) {
@@ -46,26 +47,16 @@ const AddPatient = ({ user }) => {
         return;
       }
 
-      // Show success pop-up
-      // setShowPopup(true);
-      // setTimeout(() => {
-      //   setShowPopup(false);
-      //   navigate("/dashboard"); // Redirect to dashboard
-      // }, 3000);
-      // Save the patient details to include in the email later
       setPatientDetails(response.data.patient || formData);
-      // Show email form so the user can provide patient's email address
       setShowEmailForm(true);
     } catch (error) {
       setError(error.response?.data?.message || "Failed to add patient.");
     }
   };
 
-
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    // Construct a message with patient details
     const messageContent = `
       Patient Details:
       Name: ${patientDetails.name}
@@ -79,13 +70,11 @@ const AddPatient = ({ user }) => {
       Bed Type: ${patientDetails.bedType}
     `;
     try {
-      // Send a request to your email endpoint
       await axios.post(
         "http://localhost:8080/send-email",
         { email: patientEmail, message: messageContent },
         { withCredentials: true }
       );
-      // Optionally show a success message and redirect after a delay
       setTimeout(() => {
         navigate("/dashboard");
       }, 3000);
@@ -95,118 +84,162 @@ const AddPatient = ({ user }) => {
   };
 
   return (
-    <div className="add-patient-container">
-      <h2>Add Patient</h2>
-      {error && <p className="error">{error}</p>}
-       {/* Patient Details Form */}
-       {!showEmailForm && (
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Patient's Name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="number"
-            name="age"
-            placeholder="Age"
-            value={formData.age}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="number"
-            name="weight"
-            placeholder="Weight (kg)"
-            value={formData.weight}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="phoneNumber"
-            placeholder="Phone Number"
-            value={formData.phoneNumber}
-            onChange={handleChange}
-            required
-          />
-          <select
-            name="bloodGroup"
-            value={formData.bloodGroup}
-            onChange={handleChange}
-            required
-          >
-            {["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"].map(
-              (group) => (
-                <option key={group} value={group}>
-                  {group}
-                </option>
-              )
-            )}
-          </select>
-          <input
-            type="text"
-            name="address"
-            placeholder="Address"
-            value={formData.address}
-            onChange={handleChange}
-            required
-          />
-          <select
-            name="status"
-            value={formData.status}
-            onChange={handleChange}
-            required
-          >
-            <option value="ADMITTED">Admitted</option>
-            <option value="DISCHARGED">Discharged</option>
-          </select>
-          <select
-            name="severity"
-            value={formData.severity}
-            onChange={handleChange}
-            required
-          >
-            <option value="1">Low</option>
-            <option value="2">Moderate</option>
-            <option value="3">Critical</option>
-          </select>
-          <select
-            name="bedType"
-            value={formData.bedType}
-            onChange={handleChange}
-            required
-          >
-            <option value="Regular">Regular</option>
-            <option value="General">General</option>
-            <option value="ICU">ICU</option>
-          </select>
-          <button type="submit">Add Patient</button>
-        </form>
-      )}
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+      <div className="bg-white shadow-lg rounded-xl p-10 w-full max-w-lg font-bold">
 
-      {/* Email Form */}
-      {showEmailForm && (
-        <form onSubmit={handleEmailSubmit}>
-          <h3>Patient added successfully!</h3>
-          <p>Please enter the patient’s email address to send the details:</p>
-          <input
-            type="email"
-            name="patientEmail"
-            placeholder="Patient's Email"
-            value={patientEmail}
-            onChange={handlePatientEmailChange}
-            required
-          />
-          <button type="submit">Send Email</button>
-        </form>
-      )}
+        {!showEmailForm && (
+          <>
+          <div className="text-2xl font-bold text-gray-500 mb-8 text-center py-2 px-10">
+          Add Patient
+        </div>
+            {error && (
+              <p className="text-red-500 text-sm mb-4 text-center font-semibold">{error}</p>
+            )}
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <input
+                type="text"
+                name="name"
+                placeholder="Patient's Name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-md text-lg"
+              />
+              <input
+                type="number"
+                name="age"
+                placeholder="Age"
+                value={formData.age}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-md text-lg"
+              />
+              <input
+                type="number"
+                name="weight"
+                placeholder="Weight (kg)"
+                value={formData.weight}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-md text-lg"
+              />
+              <input
+                type="text"
+                name="phoneNumber"
+                placeholder="Phone Number"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-md text-lg"
+                style={{ border: '1px solid rgb(199, 200, 202)',
+                    borderRadius: '0.375rem'
+           }}
+              />
+              <select
+                name="bloodGroup"
+                value={formData.bloodGroup}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 bg-white border border-gray-300 rounded-md text-lg"
+                style={{ border: '1px solid rgb(199, 200, 202)',
+                    borderRadius: '0.375rem'
+           }}
+              >
+                {["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"].map((group) => (
+                  <option key={group} value={group}>
+                    {group}
+                  </option>
+                ))}
+              </select>
+              <input
+                type="text"
+                name="address"
+                placeholder="Address"
+                value={formData.address}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-md text-lg"
+              />
+              <select
+                name="status"
+                value={formData.status}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 bg-white border border-gray-300 rounded-md text-lg"
+                style={{ border: '1px solid rgb(199, 200, 202)',
+                    borderRadius: '0.375rem'
+           }}
+              >
+                <option value="ADMITTED">Admitted</option>
+                <option value="DISCHARGED">Discharged</option>
+              </select>
+              <select
+                name="severity"
+                value={formData.severity}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 bg-white border border-gray-300 rounded-md text-lg"
+                style={{ border: '1px solid rgb(199, 200, 202)',
+                    borderRadius: '0.375rem'
+           }}
+              >
+                <option value="1">Low</option>
+                <option value="2">Moderate</option>
+                <option value="3">Critical</option>
+              </select>
+              <select
+                name="bedType"
+                value={formData.bedType}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 bg-white border border-gray-300 rounded-md text-lg"
+                style={{ border: '1px solid rgb(199, 200, 202)',
+                    borderRadius: '0.375rem'
+           }}
+              >
+                <option value="Regular">Regular</option>
+                <option value="General">General</option>
+                <option value="ICU">ICU</option>
+              </select>
+              <button
+                type="submit"
+                className="button"
+               
+              >
+                Add Patient
+              </button>
+            </form>
+          </>
+        )}
+
+        {showEmailForm && (
+          <>
+            <h2 className="text-2xl font-bold text-gray-600 mb-6 text-center">
+              Patient added successfully!
+            </h2>
+            <p className="mb-4 text-center">Please enter the patient’s email address to send the details:</p>
+            {error && (
+              <p className="text-red-500 text-sm mb-4 text-center font-semibold">{error}</p>
+            )}
+            <form onSubmit={handleEmailSubmit} className="space-y-5">
+              <input
+                type="email"
+                name="patientEmail"
+                placeholder="Patient's Email"
+                value={patientEmail}
+                onChange={handlePatientEmailChange}
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-md text-lg"
+              />
+            <button type="submit" className="button">
+                Send Email
+              </button>
+            </form>
+          </>
+        )}
+      </div>
     </div>
   );
 };
 
 export default AddPatient;
-

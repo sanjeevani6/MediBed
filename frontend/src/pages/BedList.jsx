@@ -34,7 +34,9 @@ const BedList = () => {
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
-      <h2 className="text-3xl font-bold mb-6 text-center">🏥 Bed Management</h2>
+        <div className="text-2xl font-bold text-gray-500 mb-8 text-center py-2 px-10">
+          BED MANAGEMENT
+        </div>
 
       {/* Search & Filter Row */}
       <div className="flex flex-wrap items-center gap-4 bg-gray-100 p-4 rounded-lg mb-8 shadow-md">
@@ -59,14 +61,14 @@ const BedList = () => {
       </div>
 
       {/* Vacant Beds Section */}
-      <h3 className="text-2xl font-semibold mt-4 mb-4 text-green-700">🛏 Vacant Beds</h3>
+      <h3 className="text-2xl font-semibold mt-4 mb-4 py-3 text-green-700">🛏 Vacant Beds</h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {filterBeds(vacantBeds).length > 0 ? (
           filterBeds(vacantBeds).map((bed) => (
             <div
   key={bed._id}
   onClick={() => navigate(`/beds/${bed._id}`)}
-  className="cursor-pointer p-6 !border-2 !border-red-400 outline outline-2 outline-blue-8080 rounded-lg shadow-lg bg-white hover:bg-red-100 transition-all duration-300"
+  className="cursor-pointer p-6   rounded-lg shadow-lg bg-white hover:bg-green-100 transition-all duration-300"
 >
 
               <p className="text-lg font-semibold text-green-700">Bed {bed.bedNumber}</p>
@@ -79,16 +81,16 @@ const BedList = () => {
       </div>
 
       {/* Occupied Beds Section */}
-      <h3 className="text-2xl font-semibold mt-8 mb-4 text-red-700">🏥 Occupied Beds</h3>
+      <h3 className="text-2xl font-semibold mt-8 mb-4 text-red-700 py-3">🏥 Occupied Beds</h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {filterBeds(occupiedBeds).length > 0 ? (
           filterBeds(occupiedBeds).map((bed) => (
             <div
               key={bed._id}
               onClick={() => navigate(`/beds/${bed._id}`)}
-              className="cursor-pointer p-6 border-2 border-red-400 rounded-lg shadow-lg bg-white hover:bg-red-100 transition-all duration-300"
+              className="cursor-pointer p-6  rounded-lg shadow-lg bg-white hover:bg-gray-100 transition-all duration-300"
             >
-              <p className="text-lg font-semibold text-red-700">Bed {bed.bedNumber}</p>
+              <p className="text-lg font-semibold text-green-700">Bed {bed.bedNumber}</p>
               <p className="text-gray-600"><strong>Type:</strong> {bed.type}</p>
               <p className="text-gray-600"><strong>Patient:</strong> {bed.patient?.name}</p>
             </div>
