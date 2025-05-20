@@ -152,25 +152,43 @@ export const dischargepatient=async(req,res)=>{
     // await patient.save();
     const dischargeDate = new Date();
 
+    // Free the bed and update its history
+if (patient.assignedBed) {
+  const bed = await Bed.findById(patient.assignedBed);
+  if (bed) {
+    const bedHistEntry = bed.history.find(
+      (entry) => entry.patient.toString() === patient._id.toString() && !entry.dischargedAt
+    );
+    if (bedHistEntry) {
+      bedHistEntry.dischargedAt = new Date();
+    }
+    bed.status = "Vacant";
+    bed.patient = null;
+    await bed.save();
+  }
+}
+
+
+
     // Update the last bed history entry's dischargedAt instead of pushing a new one
     const lastBedEntry = patient.bedHistory[patient.bedHistory.length - 1];
     if (lastBedEntry && !lastBedEntry.dischargedAt) {
       lastBedEntry.dischargedAt = dischargeDate;
     }
 
-    // Find the bed where the patient was admitted
-    const bed = await Bed.findOne({ patient: patient._id });
-    if (!bed) {
-      return res.status(400).json({ error: "Bed not found for this patient" });
-    }
+    // // Find the bed where the patient was admitted
+    // const bed = await Bed.findOne({ patient: patient._id });
+    // if (!bed) {
+    //   return res.status(400).json({ error: "Bed not found for this patient" });
+    // }
 
     let totalCost = 0;
     if (!patient.bedHistory) patient.bedHistory = [];
 
-    const lastBed = patient.bedHistory[patient.bedHistory.length - 1];
-    if (lastBed && !lastBed.dischargedAt) {
-      lastBed.dischargedAt = new Date();
-    }
+    // const lastBed = patient.bedHistory[patient.bedHistory.length - 1];
+    // if (lastBed && !lastBed.dischargedAt) {
+    //   lastBed.dischargedAt = new Date();
+    // }
 
 
     for (const history of patient.bedHistory) {
@@ -185,14 +203,29 @@ export const dischargepatient=async(req,res)=>{
     patient.totalCost += totalCost;
     await patient.save();
 
+    let bed;
+    if (patient.assignedBed) {
+      bed = await Bed.findById(patient.assignedBed);
+      if (bed) {
+        // close bed.history
+        const bEntry = bed.history.find(
+          (e) => e.patient.toString() === patient._id.toString() && !e.dischargedAt
+        );
+        if (bEntry) bEntry.dischargedAt = dischargeDate;
+        bed.status = "Vacant";
+        bed.patient = null;
+        await bed.save();
+      }
+    }
+
     // const dischargeDate = new Date(); // ✅ Define discharge date
 
     // Push the discharged patient into the history array
-    bed.history.push({
-      patient: patient._id,
-      admittedAt: patient.admittedAt, // You should ideally store admission date
-      dischargedAt: dischargeDate,
-    });
+    // bed.history.push({
+    //   patient: patient._id,
+    //   admittedAt: patient.admittedAt, // You should ideally store admission date
+    //   dischargedAt: dischargeDate,
+    // });
 
     // patient.bedHistory.push({
     //   bedType: bed.type,
@@ -201,10 +234,10 @@ export const dischargepatient=async(req,res)=>{
     // });
 
     // Free the bed
-    bed.patient = null;
-    bed.status = "Vacant";
+    // bed.patient = null;
+    // bed.status = "Vacant";
     await patient.save();
-    await bed.save();
+    // await bed.save();
 
     const emailContent = `
     Dear ${patient.name},
@@ -266,11 +299,14 @@ export const updateSeverity = async (req, res) => {
         patient.bedHistory = [];
       }
       if (currentBed) {
-        patient.bedHistory.push({
-          bedType: currentBed.type,
-          admittedAt: patient.admittedAt,
-          dischargedAt: new Date(),  // Store discharge date before moving to new bed
-        });
+        // patient.bedHistory.push({
+        //   bedType: currentBed.type,
+        //   admittedAt: patient.admittedAt,
+        //   dischargedAt: new Date(),  // Store discharge date before moving to new bed
+        // });
+
+        const last = patient.bedHistory[patient.bedHistory.length - 1];
+        if (last && !last.dischargedAt) last.dischargedAt = new Date();
 
         // Free ICU bed
         currentBed.status = "Vacant";
@@ -291,7 +327,14 @@ export const updateSeverity = async (req, res) => {
         patient.assignedBed = generalBed._id;
         patient.bedType=generalBed.type;
         patient.admittedAt = new Date();
-        await patient.save(); // ✅ Ensure patient update is saved
+        const last = patient.bedHistory[patient.bedHistory.length - 1];
+        if (last && !last.dischargedAt) last.dischargedAt = new Date();
+
+        patient.bedHistory.push({
+          bedType: generalBed.type,
+          admittedAt: patient.admittedAt
+        });
+        // await patient.save(); // ✅ Ensure patient update is saved
 
         bedMessage = "Patient moved from ICU to General Ward.";
       } 
@@ -304,7 +347,11 @@ export const updateSeverity = async (req, res) => {
         patient.assignedBed = regularBed._id;
         patient.bedType=regularBed.type;
         patient.admittedAt = new Date();
-        await patient.save(); // ✅ Ensure patient update is saved
+        patient.bedHistory.push({
+          bedType: regularBed.type,
+          admittedAt: patient.admittedAt
+        });
+        // await patient.save(); // ✅ Ensure patient update is saved
 
         bedMessage = "Patient moved from ICU to Regular Ward.";
       } 
@@ -323,11 +370,13 @@ export const updateSeverity = async (req, res) => {
         patient.bedHistory = [];
       }
       if (currentBed) {
-        patient.bedHistory.push({
-          bedType: currentBed.type,
-          admittedAt: patient.admittedAt,
-          dischargedAt: new Date(),  // Store discharge date before moving to new bed
-        });
+        const last = patient.bedHistory[patient.bedHistory.length - 1];
+        if (last && !last.dischargedAt) last.dischargedAt = new Date();
+        // patient.bedHistory.push({
+        //   bedType: currentBed.type,
+        //   admittedAt: patient.admittedAt,
+        //   dischargedAt: new Date(),  // Store discharge date before moving to new bed
+        // });
         // Free General Bed
         currentBed.status = "Vacant";
         currentBed.patient = null;
@@ -346,7 +395,11 @@ export const updateSeverity = async (req, res) => {
         patient.assignedBed = icuBed._id;
         patient.bedType=icuBed.type;
         patient.admittedAt = new Date();
-        await patient.save(); // ✅ Ensure patient update is saved
+        patient.bedHistory.push({
+          bedType: icuBed.type,
+          admittedAt: patient.admittedAt
+        });
+        // await patient.save(); // ✅ Ensure patient update is saved
 
         bedMessage = "Patient moved to ICU due to severity increase.";
       } else {

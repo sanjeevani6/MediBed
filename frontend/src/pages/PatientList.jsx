@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
- import { useNavigate } from "react-router-dom";
- import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import SidebarLayout from "../components/SidebarLayout";
+
  
  const PatientList = () => {
    const [patients, setPatients] = useState([]); // Fetched patients
@@ -36,6 +38,7 @@ import { useState, useEffect } from "react";
    }, [searchQuery, patients]);
  
    return (
+    <SidebarLayout>
      <div className="patient-list-container">
        <h2>Patient List</h2>
  
@@ -75,6 +78,7 @@ import { useState, useEffect } from "react";
          )}
        </ul>
      </div>
+     </SidebarLayout>
    );
  };
  
