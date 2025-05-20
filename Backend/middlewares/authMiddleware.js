@@ -28,8 +28,8 @@ const verifyAndRefreshToken = (req, res, next) => { // ✅ Added `req` as a para
 
     res.cookie("accessToken", newAccessToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      secure: true,
+      sameSite: "None",
       maxAge: 15 * 60 * 1000, // 15 min
     });
 
