@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
  import axios from "axios";
  import { useNavigate } from "react-router-dom";
+ import SidebarLayout from "../components/SidebarLayout";
  
  const StaffList = ({ user }) => {
    const [staff, setStaff] = useState([]);
@@ -51,6 +52,7 @@ import { useEffect, useState } from "react";
    };
  
    return (
+    <SidebarLayout>
      <div className="p-6 max-w-6xl mx-auto">
       <div className="text-2xl font-bold text-gray-500 mb-8 text-center py-2 px-10">
           STAFF LIST
@@ -109,6 +111,7 @@ import { useEffect, useState } from "react";
          )}
        </div>
      </div>
+     </SidebarLayout>
    );
  };
  

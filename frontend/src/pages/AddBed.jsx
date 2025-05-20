@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import SidebarLayout from "../components/SidebarLayout";
 
 const AddBed = ({ user }) => {
   const navigate = useNavigate();
@@ -45,50 +46,28 @@ const AddBed = ({ user }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <div className="bg-white shadow-lg rounded-xl p-15 w-full max-w-lg font-bold">
-        <div className="text-2xl font-bold text-gray-500 mb-8 text-center py-3 px-10">
-          Add Bed
-        </div>
-
-        {error && (
-          <p className="text-red-500 text-sm mb-4 text-center font-semibold">{error}</p>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <input
-            type="text"
-            name="bedNumber"
-            placeholder="Bed Number"
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-3 border border-gray-300 rounded-md text-lg"
-          />
-
-          <select
-            name="type"
-            value={formData.type}
-            onChange={handleChange}
-            className="w-full px-4 py-3 bg-white border-2 border-gray-500 rounded-md text-lg"
-            style={{ border: "1px solid rgb(199, 200, 202)", borderRadius: "0.375rem" }}
-          >
-            <option value="General">General</option>
-            <option value="ICU">ICU</option>
-            <option value="Regular">Regular</option>
-          </select>
-
-          <button type="submit" className="button">
-            Add Bed
-          </button>
-        </form>
-
-        {showPopup && (
-          <div className="mt-4 bg-green-100 text-green-700 p-3 rounded text-center text-sm font-semibold">
-            Bed added successfully! Redirecting...
-          </div>
-        )}
-      </div>
+    <SidebarLayout>
+    <div className="add-bed-container">
+      <h2>Add Bed</h2>
+      {error && <p className="error">{error}</p>}
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="bedNumber"
+          placeholder="Bed Number"
+          onChange={handleChange}
+          required
+        />
+        <select name="type" value={formData.type} onChange={handleChange}>
+          <option value="General">General</option>
+          <option value="ICU">ICU</option>
+          <option value="Regular">Regular</option>
+        </select>
+        <button type="submit">Add Bed</button>
+      </form>
+      {showPopup && <p className="success-popup">Bed added successfully!</p>}
     </div>
+    </SidebarLayout>
   );
 };
 

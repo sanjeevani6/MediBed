@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import SidebarLayout from "../components/SidebarLayout";
 
 const AddDoctor = ({ user }) => {
   const navigate = useNavigate();
@@ -53,49 +54,18 @@ const AddDoctor = ({ user }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <div className="bg-white shadow-lg rounded-xl p-15 w-full max-w-lg font-bold">
-        <div className="text-2xl font-bold text-gray-500 mb-8 text-center py-3 px-10">
-          Add Doctor
-        </div>
-
-        {error && (
-          <p className="text-red-500 text-sm mb-4 text-center font-semibold">
-            {error}
-          </p>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <input
-            type="text"
-            name="name"
-            placeholder="Doctor's Name"
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-3 border border-gray-300 rounded-md text-lg"
-          />
-
-          <input
-            type="text"
-            name="specialization"
-            placeholder="Specialization"
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-3 border border-gray-300 rounded-md text-lg"
-          />
-
-          <button type="submit" className="button">
-            Add Doctor
-          </button>
-        </form>
-
-        {showPopup && (
-          <div className="mt-4 bg-green-100 text-green-700 p-3 rounded text-center text-sm font-semibold">
-            Doctor added successfully! Redirecting...
-          </div>
-        )}
-      </div>
+    <SidebarLayout>
+    <div className="add-doctor-container">
+      <h2>Add Doctor</h2>
+      {error && <p className="error">{error}</p>}
+      <form onSubmit={handleSubmit}>
+        <input type="text" name="name" placeholder="Doctor's Name" onChange={handleChange} required />
+        <input type="text" name="specialization" placeholder="Specialization" onChange={handleChange} required />
+        <button type="submit">Add Doctor</button>
+      </form>
+      {showPopup && <p className="success-popup">Doctor added successfully!</p>}
     </div>
+    </SidebarLayout>
   );
 };
 

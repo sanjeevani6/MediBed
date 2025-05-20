@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import SidebarLayout from "../components/SidebarLayout";
 
 const BedList = () => {
   const [vacantBeds, setVacantBeds] = useState([]);
@@ -33,6 +34,7 @@ const BedList = () => {
   };
 
   return (
+    <SidebarLayout>
     <div className="p-6 max-w-6xl mx-auto">
         <div className="text-2xl font-bold text-gray-500 mb-8 text-center py-2 px-10">
           BED MANAGEMENT
@@ -100,6 +102,7 @@ const BedList = () => {
         )}
       </div>
     </div>
+    </SidebarLayout>
   );
 };
 

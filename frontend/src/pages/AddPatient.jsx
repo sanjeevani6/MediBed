@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import SidebarLayout from "../components/SidebarLayout";
 
 const AddPatient = ({ user }) => {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ const AddPatient = ({ user }) => {
     phoneNumber: "",
     bloodGroup: "A+",
     address: "",
+    email:"",
     status: "ADMITTED",
     severity: "1",
     bedType: "Regular",
@@ -84,6 +86,7 @@ const AddPatient = ({ user }) => {
   };
 
   return (
+    <SidebarLayout>
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <div className="bg-white shadow-lg rounded-xl p-10 w-full max-w-lg font-bold">
 
@@ -239,6 +242,7 @@ const AddPatient = ({ user }) => {
         )}
       </div>
     </div>
+    </SidebarLayout>
   );
 };
 

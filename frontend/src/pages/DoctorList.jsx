@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
  import axios from "axios";
  import { useNavigate } from "react-router-dom";
+import SidebarLayout from "../components/SidebarLayout";
+
  const DoctorList = ({ user }) => {
    const [doctors, setDoctors] = useState([]);
    const [searchQuery, setSearchQuery] = useState("");
@@ -37,6 +39,7 @@ import { useEffect, useState } from "react";
    });
  
    return (
+    <SidebarLayout>
      <div className="list-container p-4">
   <div className="text-2xl font-bold text-gray-500 mb-8 text-center py-2 px-10">
           DOCTOR'S LIST
@@ -72,6 +75,7 @@ import { useEffect, useState } from "react";
          )}
        </div>
      </div>
+     </SidebarLayout>
    );
  };
  

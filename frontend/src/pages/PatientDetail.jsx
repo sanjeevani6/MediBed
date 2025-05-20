@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import SidebarLayout from "../components/SidebarLayout";
 
 const PatientDetail = () => {
   const { id } = useParams();
@@ -50,6 +51,7 @@ const PatientDetail = () => {
   if (!patient) return <h2>Loading...</h2>;
 
   return (
+    <SidebarLayout>
     <div className="patient-detail-container">
       <h2>Patient Details</h2>
       <p><strong>Name:</strong> {patient.name}</p>
@@ -156,6 +158,7 @@ const PatientDetail = () => {
         </button>
       )}
     </div>
+    </SidebarLayout>
   );
 };
 
