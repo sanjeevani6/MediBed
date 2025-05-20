@@ -34,7 +34,7 @@ const patientSchema = new mongoose.Schema(
       {
         bedType: { type: String, required: true },
         admittedAt: { type: Date, required: true },
-        dischargedAt: { type: Date, required: true },
+        dischargedAt: { type: Date, required: false },
       }
     ],
   },

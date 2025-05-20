@@ -46,12 +46,12 @@ export const addPatient = async (req, res) => {
       email,
       assignedBed: availableBed._id,
       admittedAt: new Date(),
-      history: [
-        {
-          bedType: bedType,
-          admittedAt: new Date(),
-        },
-      ],
+      // bedHistory: [
+      //   {
+      //     bedType: bedType,
+      //     admittedAt: new Date(),
+      //   },
+      // ],
       severityHistory: [
         {
           severity: severity, // Store the initial severity
@@ -59,6 +59,11 @@ export const addPatient = async (req, res) => {
           timestamp: new Date(),
         },
       ],
+    });
+
+    newPatient.bedHistory.push({
+      bedType: bedType,
+      admittedAt: newPatient.admittedAt,
     });
 
     await newPatient.save();
@@ -144,7 +149,14 @@ export const dischargepatient=async(req,res)=>{
 
     // Update patient's status
     patient.status = "DISCHARGED";
-    await patient.save();
+    // await patient.save();
+    const dischargeDate = new Date();
+
+    // Update the last bed history entry's dischargedAt instead of pushing a new one
+    const lastBedEntry = patient.bedHistory[patient.bedHistory.length - 1];
+    if (lastBedEntry && !lastBedEntry.dischargedAt) {
+      lastBedEntry.dischargedAt = dischargeDate;
+    }
 
     // Find the bed where the patient was admitted
     const bed = await Bed.findOne({ patient: patient._id });
@@ -154,6 +166,12 @@ export const dischargepatient=async(req,res)=>{
 
     let totalCost = 0;
     if (!patient.bedHistory) patient.bedHistory = [];
+
+    const lastBed = patient.bedHistory[patient.bedHistory.length - 1];
+    if (lastBed && !lastBed.dischargedAt) {
+      lastBed.dischargedAt = new Date();
+    }
+
 
     for (const history of patient.bedHistory) {
       if (history.dischargedAt) {
@@ -167,7 +185,7 @@ export const dischargepatient=async(req,res)=>{
     patient.totalCost += totalCost;
     await patient.save();
 
-    const dischargeDate = new Date(); // ✅ Define discharge date
+    // const dischargeDate = new Date(); // ✅ Define discharge date
 
     // Push the discharged patient into the history array
     bed.history.push({
@@ -176,11 +194,11 @@ export const dischargepatient=async(req,res)=>{
       dischargedAt: dischargeDate,
     });
 
-    patient.bedHistory.push({
-      bedType: bed.type,
-      admittedAt: patient.admittedAt,
-      dischargedAt: dischargeDate,
-    });
+    // patient.bedHistory.push({
+    //   bedType: bed.type,
+    //   admittedAt: patient.admittedAt,
+    //   dischargedAt: dischargeDate,
+    // });
 
     // Free the bed
     bed.patient = null;

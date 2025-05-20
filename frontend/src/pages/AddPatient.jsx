@@ -1,11 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useToast } from "@chakra-ui/react";
 
 const AddPatient = ({ user }) => {
   const navigate = useNavigate();
-  const toast = useToast();
   const [formData, setFormData] = useState({
     name: "",
     age: "",
