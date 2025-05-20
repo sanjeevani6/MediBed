@@ -56,19 +56,76 @@ const AddStaff = ({ user }) => {
 
   return (
     <SidebarLayout>
-    <div className="add-staff-container">
-      <h2>Add Staff Member</h2>
-      {error && <p className="error">{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <input type="text" name="name" placeholder="Name" onChange={handleChange} required />
-        <input type="text" name="staffID" placeholder="Staff ID" onChange={handleChange} required />
-        <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
-        <select name="role" onChange={handleChange}>
-          <option value="staff">Staff</option>
-          <option value="superadmin">Superadmin</option>
-        </select>
-        <button type="submit">Add Staff</button>
-      </form>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+      <div className="bg-white shadow-lg rounded-xl p-15 w-full max-w-lg font-bold">
+
+        <div className="text-2xl font-bold text-gray-500 mb-8 text-center py-3 px-10 ">
+          Add Staff Member
+        </div>
+
+        {error && (
+          <p className="text-red-500 text-sm mb-4 text-center font-semibold">
+            {error}
+          </p>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <input
+            type="text"
+            name="name"
+            placeholder="Name"
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-3 border border-gray-300 rounded-md text-lg"
+          />
+
+          <input
+            type="text"
+            name="staffID"
+            placeholder="Staff ID"
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-3 border border-gray-300 rounded-md text-lg"
+          />
+
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-3 border border-gray-300 rounded-md text-lg"
+          />
+
+          <select
+            name="role"
+            onChange={handleChange}
+           className="w-full px-4 py-3 bg-white border-2 border-gray-500 rounded-md text-lg"
+           style={{ border: '1px solid rgb(199, 200, 202)',
+                    borderRadius: '0.375rem'
+           }}
+          >
+            <option value="staff">Staff</option>
+            <option value="superadmin">Superadmin</option>
+          </select>
+
+          <button
+  type="submit"
+  className="button"
+  
+>
+  Add Staff
+</button>
+
+
+        </form>
+
+        {showPopup && (
+          <div className="mt-4 bg-green-100 text-green-700 p-3 rounded text-center text-sm font-semibold">
+            Staff member added successfully! Redirecting...
+          </div>
+        )}
+      </div>
     </div>
     </SidebarLayout>
   );
