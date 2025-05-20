@@ -8,7 +8,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:8080", // Backend server
+        target: "https://medibed.onrender.com", // Backend server
         changeOrigin: true,
         secure: false, // Set true if using HTTPS
       },

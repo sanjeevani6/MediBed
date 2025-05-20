@@ -73,7 +73,7 @@ const AddPatient = ({ user }) => {
     `;
     try {
       await axios.post(
-        "http://localhost:8080/send-email",
+        "/api/send-email",
         { email: patientEmail, message: messageContent },
         { withCredentials: true }
       );

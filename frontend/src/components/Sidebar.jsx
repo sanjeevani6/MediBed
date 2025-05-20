@@ -63,7 +63,7 @@ import {
     //fetch all groups
     const fetchGroups = async () => {
       try {
-        const { data } = await axios.get("http://localhost:8080/api/groups", getAuthConfig());
+        const { data } = await axios.get("/api/groups", getAuthConfig());
         setGroups(data);
         
         const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
@@ -83,7 +83,7 @@ import {
     const handleCreateGroup = async () => {
       try {
         await axios.post(
-          "http://localhost:8080/api/groups",
+          "/api/groups",
           { name: newGroupName, description: newGroupDescription },
           getAuthConfig()
         );
@@ -113,7 +113,7 @@ import {
     //join group
     const handleJoinGroup = async (groupId) => {
       try {
-        await axios.post(`http://localhost:8080/api/groups/${groupId}/join`, {}, getAuthConfig());
+        await axios.post(`/api/groups/${groupId}/join`, {}, getAuthConfig());
         await fetchGroups();
         setSelectedGroup(groups.find((g) => g?._id === groupId));
     
@@ -131,7 +131,7 @@ import {
     
     const handleLeaveGroup = async (groupId) => {
       try {
-        await axios.post(`http://localhost:8080/api/groups/${groupId}/leave`, {}, getAuthConfig());
+        await axios.post(`/api/groups/${groupId}/leave`, {}, getAuthConfig());
         await fetchGroups();
         setSelectedGroup(null);
     

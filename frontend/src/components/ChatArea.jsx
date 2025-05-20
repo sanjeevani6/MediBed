@@ -108,7 +108,7 @@ import{
       const token = currentUser?.token;
       try {
         const { data } = await axios.get(
-          `http://localhost:8080/api/messages/${selectedGroup?._id}`,
+          `/api/messages/${selectedGroup?._id}`,
           getAuthConfig()
         );
         setMessages(data);
@@ -139,7 +139,7 @@ import{
         console.log("Selected Group ID:", selectedGroup?._id);
 
         const { data } = await axios.post(
-          `http://localhost:8080/api/messages`,
+          `/api/messages`,
           {
             content: newMessage,
             groupId: selectedGroup?._id,

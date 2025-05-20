@@ -26,7 +26,7 @@ connectDB();
 
 // Middleware (Ensure it's only added once)
 app.use(cors({
-    origin: "http://localhost:5173", // Allow only your frontend
+    origin: "comforting-fox-4fe49b.netlify.app", // Allow only your frontend
     credentials: true, 
 }));
 app.use(express.static("public"));
