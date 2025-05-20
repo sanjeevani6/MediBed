@@ -7,7 +7,7 @@ const useAuth = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await axios.get("/api/v1/auth/check-auth", { withCredentials: true });
+        const res = await axios.get("https://medibed.onrender.com/api/v1/auth/check-auth", { withCredentials: true });
         console.log("Check auth response:", res.data); 
         setUser(res.data.user);
       } catch {

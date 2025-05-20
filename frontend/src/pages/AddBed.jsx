@@ -34,7 +34,7 @@ const AddBed = ({ user }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("/api/v1/beds/add", formData, { withCredentials: true });
+      await axios.post("https://medibed.onrender.com/api/v1/beds/add", formData, { withCredentials: true });
       setShowPopup(true);
       setTimeout(() => {
         setShowPopup(false);

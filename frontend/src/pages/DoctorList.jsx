@@ -10,7 +10,7 @@ import SidebarLayout from "../components/SidebarLayout";
    useEffect(() => {
      const fetchDoctors = async () => {
        try {
-         const res = await axios.get("/api/v1/doctor");
+         const res = await axios.get("https://medibed.onrender.com/api/v1/doctor");
          setDoctors(res.data);
        } catch (error) {
          console.error("Error fetching doctors:", error.response?.data || error.message);

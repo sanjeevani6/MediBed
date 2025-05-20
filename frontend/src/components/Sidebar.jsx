@@ -83,7 +83,7 @@ import {
     const handleCreateGroup = async () => {
       try {
         await axios.post(
-          "/api/groups",
+          "https://medibed.onrender.com/api/groups",
           { name: newGroupName, description: newGroupDescription },
           getAuthConfig()
         );
@@ -113,7 +113,7 @@ import {
     //join group
     const handleJoinGroup = async (groupId) => {
       try {
-        await axios.post(`/api/groups/${groupId}/join`, {}, getAuthConfig());
+        await axios.post(`https://medibed.onrender.com/api/groups/${groupId}/join`, {}, getAuthConfig());
         await fetchGroups();
         setSelectedGroup(groups.find((g) => g?._id === groupId));
     
@@ -131,7 +131,7 @@ import {
     
     const handleLeaveGroup = async (groupId) => {
       try {
-        await axios.post(`/api/groups/${groupId}/leave`, {}, getAuthConfig());
+        await axios.post(`https://medibed.onrender.com/api/groups/${groupId}/leave`, {}, getAuthConfig());
         await fetchGroups();
         setSelectedGroup(null);
     

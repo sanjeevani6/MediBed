@@ -39,7 +39,7 @@ const AddDoctor = ({ user }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("/api/v1/doctor/add-dr", formData, {
+      await axios.post("https://medibed.onrender.com/api/v1/doctor/add-dr", formData, {
         withCredentials: true,
       });
 

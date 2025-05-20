@@ -20,7 +20,7 @@ const SidebarLayout = ({ children }) => {
   }, []);
 
   const handleLogout = async () => {
-    await axios.post("/api/v1/auth/logout", {}, { withCredentials: true });
+    await axios.post("https://medibed.onrender.com/api/v1/auth/logout", {}, { withCredentials: true });
     navigate("/");
   };
 

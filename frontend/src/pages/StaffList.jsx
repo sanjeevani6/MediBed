@@ -44,7 +44,7 @@ import { useEffect, useState } from "react";
    const handleDelete = async (id) => {
      if (!window.confirm("Are you sure you want to delete this staff member?")) return;
      try {
-       await axios.delete(`/api/v1/staff/${id}`);
+       await axios.delete(`https://medibed.onrender.com/api/v1/staff/${id}`);
        setStaff(staff.filter((s) => s._id !== id));
      } catch (error) {
        console.error("Error deleting staff:", error.response?.data || error.message);

@@ -24,7 +24,7 @@ const App = () => {
 
   useEffect(() => {
     axios
-      .get("/api/v1/auth/check-auth", { withCredentials: true })
+      .get("https://medibed.onrender.com/api/v1/auth/check-auth", { withCredentials: true })
       .then((response) => {
         console.log("User Data:", response.data.user);
         setUser(response.data.user);

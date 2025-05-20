@@ -15,7 +15,7 @@ const Login = () => {
 
     try {
       const { data } = await axios.post(
-        "/api/v1/auth/login",
+        "https://medibed.onrender.com/api/v1/auth/login",
         { staffID, password },
         { withCredentials: true }
       );

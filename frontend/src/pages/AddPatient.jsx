@@ -42,7 +42,7 @@ const AddPatient = ({ user }) => {
     e.preventDefault();
     setError("");
     try {
-      const response = await axios.post("/api/v1/patients/add-patients", formData, { withCredentials: true });
+      const response = await axios.post("https://medibed.onrender.com/api/v1/patients/add-patients", formData, { withCredentials: true });
 
       if (response.data?.message.includes("No vacant")) {
         setError(response.data.message);
@@ -73,7 +73,7 @@ const AddPatient = ({ user }) => {
     `;
     try {
       await axios.post(
-        "/api/send-email",
+        "https://medibed.onrender.com/api/send-email",
         { email: patientEmail, message: messageContent },
         { withCredentials: true }
       );

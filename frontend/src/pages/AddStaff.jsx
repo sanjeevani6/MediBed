@@ -41,7 +41,7 @@ const AddStaff = ({ user }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("/api/v1/staff/add", formData, {
+      await axios.post("https://medibed.onrender.com/api/v1/staff/add", formData, {
         withCredentials: true,
       });
       setShowPopup(true);

@@ -23,7 +23,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get("/api/v1/auth/check-auth", { withCredentials: true });
+        const res = await axios.get("https://medibed.onrender.com/api/v1/auth/check-auth", { withCredentials: true });
         setUser(res.data.user);
         console.log("Check auth response in dashboard:", res.data);
       } catch (error) {
@@ -33,13 +33,13 @@ const Dashboard = () => {
     
     const fetchStats = async () => {
       try {
-        const patientsRes = await axios.get("/api/v1/patients/count");
+        const patientsRes = await axios.get("https://medibed.onrender.com/api/v1/patients/count");
         setTotalPatients(patientsRes.data.count);
 
-        const doctorsRes = await axios.get("/api/v1/doctor/count");
+        const doctorsRes = await axios.get("https://medibed.onrender.com/api/v1/doctor/count");
         setDoctorsOnDuty(doctorsRes.data.count);
 
-        const bedsRes = await axios.get("/api/v1/beds/count");
+        const bedsRes = await axios.get("https://medibed.onrender.com/api/v1/beds/count");
         setAvailableBeds(bedsRes.data.count);
       } catch (error) {
         console.error("Error fetching stats:", error.response?.data || error.message);
@@ -51,7 +51,7 @@ const Dashboard = () => {
   }, [navigate]);
 
   const handleLogout = async () => {
-    await axios.post("/api/v1/auth/logout", {}, { withCredentials: true });
+    await axios.post("https://medibed.onrender.com/api/v1/auth/logout", {}, { withCredentials: true });
     navigate("/");
   };
 
