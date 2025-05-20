@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import SidebarLayout from "../components/SidebarLayout";
 
 const AddStaff = ({ user }) => {
   const navigate = useNavigate();
@@ -46,6 +47,7 @@ const AddStaff = ({ user }) => {
   };
 
   return (
+    <SidebarLayout>
     <div className="add-staff-container">
       <h2>Add Staff Member</h2>
       {error && <p className="error">{error}</p>}
@@ -60,6 +62,7 @@ const AddStaff = ({ user }) => {
         <button type="submit">Add Staff</button>
       </form>
     </div>
+    </SidebarLayout>
   );
 };
 
