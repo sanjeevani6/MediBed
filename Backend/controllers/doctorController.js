@@ -6,7 +6,7 @@ import Doctor from "../models/doctormodel.js";
     const doctors = await Doctor.find();
     res.status(200).json(doctors);
   } catch (error) {
-    res.status(8080).json({ message: "Error fetching doctors", error });
+    res.status(500).json({ message: "Error fetching doctors", error });
   }
 };
 
@@ -15,7 +15,7 @@ export const countDoctors=async (req, res) => {
     const count = await Doctor.countDocuments();
     res.json({ count });
   } catch (err) {
-    res.status(8080).json({ error: "Failed to fetch doctor count" });
+    res.status(500).json({ error: "Failed to fetch doctor count" });
   }
 };
 
@@ -35,7 +35,7 @@ export const deleteDoctor = async (req, res) => {
 
     res.status(200).json({ message: "Doctor deleted successfully" });
   } catch (error) {
-    res.status(8080).json({ message: "Error deleting doctor", error });
+    res.status(500).json({ message: "Error deleting doctor", error });
   }
 };
 

@@ -20,6 +20,8 @@ dotenv.config();
 // Initialize Express
 const app = express();
 const server = http.createServer(app);
+// trust first proxy (Render, Heroku, etc.)
+app.set("trust proxy", 1);
 
 // Connect to MongoDB
 connectDB();
@@ -37,7 +39,7 @@ app.use(cookieParser());
 // Initialize Socket.io
 const io = new SocketServer(server, {
     cors: {
-        origin: "http://localhost:5173",
+        origin: "https://comforting-fox-4fe49b.netlify.app",
         methods: ["GET", "POST"],
         credentials: true,
     },

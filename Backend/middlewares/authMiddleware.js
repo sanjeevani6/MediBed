@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import Staff from "../models/staffmodel.js";
 
 const JWT_SECRET = process.env.JWT_SECRET ;
 const REFRESH_SECRET = process.env.REFRESH_SECRET ;
@@ -50,7 +51,7 @@ export const authMiddleware = async(req, res, next) => {
   try {
     const decoded = jwt.verify(accessToken, JWT_SECRET);
     // req.user = decoded;
-    req.user=await User.findById(decoded.id).select("-password");
+    req.user=await Staff.findById(decoded.id).select("-password");
     next();
   } catch (error) {
     if (!refreshToken) return res.status(401).json({ message: "Session expired, please log in again" });
