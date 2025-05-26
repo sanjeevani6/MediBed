@@ -33,13 +33,13 @@ const Dashboard = () => {
     
     const fetchStats = async () => {
       try {
-        const patientsRes = await axios.get("https://medibed.onrender.com/api/v1/patients/count");
+        const patientsRes = await axios.get("https://medibed.onrender.com/api/v1/patients/count",{ withCredentials: true });
         setTotalPatients(patientsRes.data.count);
 
-        const doctorsRes = await axios.get("https://medibed.onrender.com/api/v1/doctor/count");
+        const doctorsRes = await axios.get("https://medibed.onrender.com/api/v1/doctor/count",{ withCredentials: true });
         setDoctorsOnDuty(doctorsRes.data.count);
 
-        const bedsRes = await axios.get("https://medibed.onrender.com/api/v1/beds/count");
+        const bedsRes = await axios.get("https://medibed.onrender.com/api/v1/beds/count",{ withCredentials: true });
         setAvailableBeds(bedsRes.data.count);
       } catch (error) {
         console.error("Error fetching stats:", error.response?.data || error.message);

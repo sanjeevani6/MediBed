@@ -14,7 +14,7 @@ import SidebarLayout from "../components/SidebarLayout";
    useEffect(() => {
      const fetchPatients = async () => {
        try {
-         const res = await axios.get(`https://medibed.onrender.com/api/v1/patients?status=${category}`);
+         const res = await axios.get(`https://medibed.onrender.com/api/v1/patients?status=${category}`,{ withCredentials: true });
          console.log("patients:", res.data);
          setPatients(res.data);
          setFilteredPatients(res.data); // Initialize filtered list with all patients

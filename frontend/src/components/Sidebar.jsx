@@ -63,7 +63,7 @@ import {
     //fetch all groups
     const fetchGroups = async () => {
       try {
-        const { data } = await axios.get("/api/groups", getAuthConfig());
+        const { data } = await axios.get("https://medibed.onrender.com/api/groups", {... getAuthConfig(), withCredentials:true});
         setGroups(data);
         
         const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
@@ -85,7 +85,8 @@ import {
         await axios.post(
           "https://medibed.onrender.com/api/groups",
           { name: newGroupName, description: newGroupDescription },
-          getAuthConfig()
+          {...getAuthConfig(),
+          withCredentials: true,}
         );
     
         toast({ title: "Group Created Successfully", status: "success", duration: 3000, isClosable: true });
@@ -113,7 +114,7 @@ import {
     //join group
     const handleJoinGroup = async (groupId) => {
       try {
-        await axios.post(`https://medibed.onrender.com/api/groups/${groupId}/join`, {}, getAuthConfig());
+        await axios.post(`https://medibed.onrender.com/api/groups/${groupId}/join`, {},{ ... getAuthConfig(), withCredentials:true});
         await fetchGroups();
         setSelectedGroup(groups.find((g) => g?._id === groupId));
     
@@ -131,7 +132,7 @@ import {
     
     const handleLeaveGroup = async (groupId) => {
       try {
-        await axios.post(`https://medibed.onrender.com/api/groups/${groupId}/leave`, {}, getAuthConfig());
+        await axios.post(`https://medibed.onrender.com/api/groups/${groupId}/leave`, {}, { ...getAuthConfig(),withCredentials:true});
         await fetchGroups();
         setSelectedGroup(null);
     

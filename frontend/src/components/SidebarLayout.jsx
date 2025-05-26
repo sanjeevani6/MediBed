@@ -10,7 +10,7 @@ const SidebarLayout = ({ children }) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get("/api/v1/auth/check-auth", { withCredentials: true });
+        const res = await axios.get("https://medibed.onrender.com/api/v1/auth/check-auth", { withCredentials: true });
         setUser(res.data.user);
       } catch (error) {
         console.error("Sidebar auth error:", error.response?.data || error.message);
