@@ -1,37 +1,60 @@
 import Staff from "../models/staffmodel.js";
-import bcrypt from 'bcrypt';
-const addstaff =
-    async (req, res) => {
-        try {
-            console.log("Received request to add staff:", req.body);
+import Hospital from "../models/hospitalModel.js";
+import bcrypt from "bcryptjs";
 
-            // Ensure the request body has all required fields
-            if (!req.body.name || !req.body.staffID || !req.body.password) {
-                return res.status(400).json({ message: "All fields are required" });
-            }
+const addstaff = async (req, res) => {
+  try {
+    console.log("Received request to add staff:", req.body);
 
-            // Check if staffID already exists
-         
-    console.log("Checking if staff ID already exists...");
-    const existingStaff = await Staff.findOne({ staffID:req.body.staffID });
-    
-    console.log("Query result for existing staff:", existingStaff);
+    const { name, staffID, password, role } = req.body;
+
+    // Validate required fields
+    if (!name || !staffID || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // Get hospital name from the authenticated user
+    const hospitalName = req.user?.hospital;
+    if (!hospitalName) {
+      return res.status(400).json({ message: "Hospital not found in token" });
+    }
+
+    // Find the hospital by name
+    const hospital = await Hospital.findOne({ name: hospitalName });
+    if (!hospital) {
+      return res.status(404).json({ message: "Hospital not found" });
+    }
+
+    // Check for existing staff with same staffID **in the same hospital**
+    const existingStaff = await Staff.findOne({
+      staffID: staffID,
+      hospital: hospital._id,
+    });
 
     if (existingStaff) {
-        return res.status(400).json({ message: "Staff ID already exists" });
-      }
-
-            const { name, staffID, password, role } = req.body;
-           
-            // Hash password before saving
-            const hashedPassword = await bcrypt.hash(password, 10);
-              // Create new staff
-            const newStaff = new Staff({ name, staffID, password: hashedPassword, role });
-            await newStaff.save();
-
-            res.status(201).json({ message: "Staff member added successfully!" });
-        } catch (error) {
-            res.status(500).json({ message: "Error adding staff member", error });
-        }
+      return res.status(400).json({ message: "Staff ID already exists in this hospital" });
     }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create new staff member
+    const newStaff = new Staff({
+      name,
+      staffID,
+      password: hashedPassword,
+      role,
+      hospital: hospital._id,
+    });
+
+    await newStaff.save();
+
+    return res.status(201).json({ message: "Staff member added successfully!" });
+
+  } catch (error) {
+    console.error("Add staff error:", error);
+    return res.status(500).json({ message: "Error adding staff member", error });
+  }
+};
+
 export default addstaff;

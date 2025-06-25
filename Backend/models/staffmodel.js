@@ -5,6 +5,11 @@ const staffSchema = new mongoose.Schema({
   staffID: { type: String, required: true, unique: true },
   password: { type: String, required: true }, // Hashed password
   role: { type: String, enum: ["staff", "superadmin"], default: "staff" }, // Superadmin can add staff
+  hospital: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Hospital",
+    required: true,
+  },
 },{ collection: "Staff" });
 
 export default mongoose.model("Staff", staffSchema);

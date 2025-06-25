@@ -9,7 +9,7 @@ const REFRESH_SECRET = process.env.REFRESH_SECRET ;
  */
 const generateAccessToken = (user) => {
   return jwt.sign(
-    { id: user.id, staffID: user.staffID, name: user.name, role: user.role },
+    { id: user.id, staffID: user.staffID, name: user.name, role: user.role,hospital: user.hospital },
     JWT_SECRET,
     { expiresIn: "15m" }
   );

@@ -1,4 +1,5 @@
 import Staff from "../models/staffmodel.js";
+import Hospital from "../models/hospitalModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
@@ -17,7 +18,7 @@ const COOKIE_OPTIONS = {
 // Generate Access Token (expires in 15 minutes)
 const generateAccessToken = (staff) => {
   return jwt.sign(
-    { id: staff._id, staffID: staff.staffID, name: staff.name, role: staff.role },
+    { id: staff._id, staffID: staff.staffID, name: staff.name, role: staff.role, hospital: hospitalName, },
     JWT_SECRET,
     { expiresIn: "15m" }
   );
@@ -26,7 +27,7 @@ const generateAccessToken = (staff) => {
 // Generate Refresh Token (expires in 7 days)
 const generateRefreshToken = (staff) => {
   return jwt.sign(
-    { id: staff._id, staffID: staff.staffID, name: staff.name, role: staff.role },
+    { id: staff._id, staffID: staff.staffID, name: staff.name, role: staff.role, hospital: hospitalName, },
     REFRESH_SECRET,
     { expiresIn: "7d" }
   );
@@ -35,10 +36,17 @@ const generateRefreshToken = (staff) => {
 
 // Staff Login - Generates JWT Acess and Refresh Token in an HTTP-only cookie
 export const loginStaff = async (req, res) => {
-  const { staffID, password } = req.body;
+  const { staffID, password ,hospitalName} = req.body;
+  if (!staffID || !password || !hospitalName) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
   console.log( "request",req.body);
   console.log("Current database:", mongoose.connection.name);
  try {  
+  const hospital = await Hospital.findOne({ name: hospitalName });
+  if (!hospital) {
+    return res.status(400).json({ message: "Hospital not found" });
+  }
    const staff = await Staff.findOne({ staffID: req.body.staffID }); 
     console.log("staff",staff);
     if (!staff) return res.status(400).json({ message: "Invalid credentials" });
@@ -49,8 +57,8 @@ export const loginStaff = async (req, res) => {
     console.log("password matched");
 
     // Generate tokens
-    const accessToken = generateAccessToken(staff);
-    const refreshToken = generateRefreshToken(staff);
+    const accessToken = generateAccessToken(staff,hospital.name);
+    const refreshToken = generateRefreshToken(staff,hospital.name);
  console.log("accessToken",accessToken);
  console.log("refreshToken",refreshToken);
     // Set cookie
@@ -71,6 +79,75 @@ export const loginStaff = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+//register-admin and hospital
+export const registerAdmin = async (req, res) => {
+  try {
+    const { name, staffID, password, hospitalName } = req.body;
+
+    if (!name || !staffID || !password || !hospitalName) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const existingHospital = await Hospital.findOne({ name: hospitalName });
+    if (existingHospital) {
+      return res.status(400).json({ message: "Hospital already registered" });
+    }
+
+    const existingStaff = await Staff.findOne({ staffID });
+    if (existingStaff) {
+      return res.status(400).json({ message: "Staff ID already taken" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newHospital = new Hospital({ name: hospitalName });
+    await newHospital.save();
+
+    const newAdmin = new Staff({
+      name,
+      staffID,
+      password: hashedPassword,
+      role: "superadmin",
+      hospital: newHospital._id,
+    });
+    await newAdmin.save();
+
+    newHospital.admin = newAdmin._id;
+    await newHospital.save();
+
+    // Generate tokens
+    const accessToken = generateAccessToken(newAdmin, newHospital.name);
+    const refreshToken = generateRefreshToken(newAdmin, newHospital.name);
+
+    console.log("accessToken", accessToken);
+    console.log("refreshToken", refreshToken);
+
+    // Set cookie
+    res.cookie("accessToken", accessToken, { ...COOKIE_OPTIONS, maxAge: 15 * 60 * 1000 }); // 15 min
+    res.cookie("refreshToken", refreshToken, COOKIE_OPTIONS); // 7 days
+
+    console.log("setting cookies done");
+
+    const responseData = {
+      message: "Registration successful",
+      staff: {
+        name: newAdmin.name,
+        staffID: newAdmin.staffID,
+        role: newAdmin.role,
+        _id: newAdmin._id,
+      },
+      token: accessToken,
+    };
+
+    console.log("Sending response:", responseData);
+
+    return res.status(201).json(responseData);
+  } catch (error) {
+    console.error("Registration error:", error);
+    return res.status(500).json({ message: "Server error during registration" });
+  }
+};
+
 
 // Logout - Clears both cookies
 export const logoutStaff = (req, res) => {
