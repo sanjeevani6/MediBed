@@ -50,8 +50,9 @@ export const authMiddleware = async(req, res, next) => {
 
   try {
     const decoded = jwt.verify(accessToken, JWT_SECRET);
-    // req.user = decoded;
-    req.user=await Staff.findById(decoded.id).select("-password");
+    console.log("decoded token:",decoded);
+    req.user = decoded;
+    //req.user=await Staff.findById(decoded.id).select("-password");
     next();
   } catch (error) {
     if (!refreshToken) return res.status(401).json({ message: "Session expired, please log in again" });

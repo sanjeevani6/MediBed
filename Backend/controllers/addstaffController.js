@@ -15,6 +15,7 @@ const addstaff = async (req, res) => {
 
     // Get hospital name from the authenticated user
     const hospitalName = req.user?.hospital;
+    console.log("hospital name:",hospitalName);
     if (!hospitalName) {
       return res.status(400).json({ message: "Hospital not found in token" });
     }
