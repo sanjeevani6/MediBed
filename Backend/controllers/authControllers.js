@@ -2,10 +2,10 @@ import Staff from "../models/staffmodel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
-// import { signAccessToken, signRefreshToken } from "../utils/jwt.js";
 
-const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
-const REFRESH_SECRET = process.env.REFRESH_SECRET || "your_refresh_secret";
+
+const JWT_SECRET = process.env.JWT_SECRET ;
+const REFRESH_SECRET = process.env.REFRESH_SECRET ;
 
 const COOKIE_OPTIONS = {
   httpOnly: true,
@@ -38,17 +38,7 @@ export const loginStaff = async (req, res) => {
   const { staffID, password } = req.body;
   console.log( "request",req.body);
   console.log("Current database:", mongoose.connection.name);
- // console.log("Collections available:", await mongoose.connection.db.listCollections().toArray());
- // const staff = await Staff.findOne({ staffID: "202" });
-//console.log("Matching staff document:", staff);
- 
-
-
-  try {
-
-
-
-    
+ try {  
    const staff = await Staff.findOne({ staffID: req.body.staffID }); 
     console.log("staff",staff);
     if (!staff) return res.status(400).json({ message: "Invalid credentials" });

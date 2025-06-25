@@ -28,7 +28,7 @@ connectDB();
 
 // Middleware (Ensure it's only added once)
 app.use(cors({
-    origin: "https://comforting-fox-4fe49b.netlify.app", // Allow only your frontend
+    origin: "https://comforting-fox-4fe49b.netlify.app", // Allow only frontend
     credentials: true, 
 }));
 app.use(express.static("public"));
@@ -123,4 +123,4 @@ app.post("/send-email", async (req, res) => {
 
 // Set port correctly
 const PORT = process.env.PORT || 8080;
-server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+server.listen(PORT, () => console.log(` Server running on port ${PORT}`));

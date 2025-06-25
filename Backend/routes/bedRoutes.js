@@ -1,9 +1,10 @@
 import express from "express";
 import { addBed, countBeds, getAllBeds, getBedHistory } from "../controllers/bedController.js";
+import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 
 const router = express.Router();
-router.post("/add", addBed);
+router.post("/add",authMiddleware, addBed);
 router.get("/count",countBeds);
 router.get("/", getAllBeds);  // Get all beds categorized into vacant & occupied
 router.get("/:id", getBedHistory); // Get specific bed history

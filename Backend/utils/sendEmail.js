@@ -8,7 +8,7 @@ export const sendEmail = async (to, messageContent) => {
       secure: false,
       auth: {
         user: 'medibed098@gmail.com',
-        pass: 'vtbdfqilayxkrkpj', // Use your Google App Password
+        pass: 'vtbdfqilayxkrkpj', // Google App Password
       },
       tls: {
         rejectUnauthorized: false,

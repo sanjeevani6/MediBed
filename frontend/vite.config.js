@@ -10,7 +10,7 @@ export default defineConfig({
       "/api": {
         target: "https://medibed.onrender.com", // Backend server
         changeOrigin: true,
-        secure: false, // Set true if using HTTPS
+        secure: true, //  true when using HTTPS
       },
     },
   },

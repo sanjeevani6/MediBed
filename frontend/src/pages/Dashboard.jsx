@@ -50,11 +50,6 @@ const Dashboard = () => {
     fetchStats();
   }, [navigate]);
 
-  const handleLogout = async () => {
-    await axios.post("https://medibed.onrender.com/api/v1/auth/logout", {}, { withCredentials: true });
-    navigate("/");
-  };
-
   return (
     <SidebarLayout>
       {/* Top Bar */}

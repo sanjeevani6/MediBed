@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
  import axios from "axios";
- import { useNavigate } from "react-router-dom";
 import SidebarLayout from "../components/SidebarLayout";
 
  const DoctorList = ({ user }) => {
    const [doctors, setDoctors] = useState([]);
    const [searchQuery, setSearchQuery] = useState("");
-   const navigate = useNavigate();
+  
    useEffect(() => {
      const fetchDoctors = async () => {
        try {

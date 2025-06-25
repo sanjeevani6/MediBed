@@ -5,7 +5,10 @@ const patientSchema = new mongoose.Schema(
     name: { type: String, required: true },
     age: { type: Number, required: true },
     weight: { type: Number, required: true }, // Weight in kg
-    phoneNumber: { type: String, required: true },
+    phoneNumber: { type: String, 
+                   required: true,
+                   match: [/^\d{10}$/, 'Please enter a valid 10-digit phone number'],
+                  },
     email: {
       type: String,
       required: true,
@@ -39,7 +42,6 @@ const patientSchema = new mongoose.Schema(
     ],
   },
   { collection: "patients", timestamps: true }, // Ensure correct collection name
-  // { timestamps: true } // Adds createdAt and updatedAt fields automatically
 );
 
 export  const Patient = mongoose.model("Patient", patientSchema);

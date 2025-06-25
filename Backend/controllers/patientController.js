@@ -46,12 +46,6 @@ export const addPatient = async (req, res) => {
       email,
       assignedBed: availableBed._id,
       admittedAt: new Date(),
-      // bedHistory: [
-      //   {
-      //     bedType: bedType,
-      //     admittedAt: new Date(),
-      //   },
-      // ],
       severityHistory: [
         {
           severity: severity, // Store the initial severity
@@ -176,20 +170,8 @@ if (patient.assignedBed) {
       lastBedEntry.dischargedAt = dischargeDate;
     }
 
-    // // Find the bed where the patient was admitted
-    // const bed = await Bed.findOne({ patient: patient._id });
-    // if (!bed) {
-    //   return res.status(400).json({ error: "Bed not found for this patient" });
-    // }
-
     let totalCost = 0;
     if (!patient.bedHistory) patient.bedHistory = [];
-
-    // const lastBed = patient.bedHistory[patient.bedHistory.length - 1];
-    // if (lastBed && !lastBed.dischargedAt) {
-    //   lastBed.dischargedAt = new Date();
-    // }
-
 
     for (const history of patient.bedHistory) {
       if (history.dischargedAt) {
@@ -218,27 +200,7 @@ if (patient.assignedBed) {
       }
     }
 
-    // const dischargeDate = new Date(); // ✅ Define discharge date
-
-    // Push the discharged patient into the history array
-    // bed.history.push({
-    //   patient: patient._id,
-    //   admittedAt: patient.admittedAt, // You should ideally store admission date
-    //   dischargedAt: dischargeDate,
-    // });
-
-    // patient.bedHistory.push({
-    //   bedType: bed.type,
-    //   admittedAt: patient.admittedAt,
-    //   dischargedAt: dischargeDate,
-    // });
-
-    // Free the bed
-    // bed.patient = null;
-    // bed.status = "Vacant";
     await patient.save();
-    // await bed.save();
-
     const emailContent = `
     Dear ${patient.name},
 
