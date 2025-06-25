@@ -39,7 +39,7 @@ const PatientDetail = () => {
 
   const handleSeverityUpdate = async () => {
     try {
-      const res = await axios.put(`https://medibed.onrender.com/api/v1/patients/${id}/severity`, {},{ severity:Number(severity), note }, {
+      const res = await axios.put(`https://medibed.onrender.com/api/v1/patients/${id}/severity`, { severity:Number(severity), note }, {
         withCredentials: true,
       });
       setPatient(res.data.patient);
