@@ -18,6 +18,7 @@ import BedDetail from "./pages/BedDetail";
 import AddBed from "./pages/AddBed";
 
 import { ChakraProvider } from "@chakra-ui/react";
+import Register from "./pages/Register.jsx";
 const App = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -45,6 +46,7 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="/" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<PrivateRoute user={user}><Dashboard /></PrivateRoute>} />
           <Route path="/staff-list" element={<PrivateRoute user={user}><StaffList user={user} /></PrivateRoute>} />

@@ -9,7 +9,9 @@ import SidebarLayout from "../components/SidebarLayout";
    useEffect(() => {
      const fetchDoctors = async () => {
        try {
-         const res = await axios.get("https://medibed.onrender.com/api/v1/doctor");
+         const res = await axios.get("https://medibed.onrender.com/api/v1/doctor", {
+          withCredentials: true,
+        });
          setDoctors(res.data);
        } catch (error) {
          console.error("Error fetching doctors:", error.response?.data || error.message);
@@ -20,7 +22,7 @@ import SidebarLayout from "../components/SidebarLayout";
    const handleDelete = async (id) => {
      if (!window.confirm("Are you sure you want to delete this doctor?")) return;
      try {
-       await axios.delete(`/api/v1/doctor/${id}`);
+       await axios.delete(`https://medibed.onrender.com/api/v1/doctor/${id}`,{withCredentials:true});
        setDoctors(doctors.filter((doc) => doc._id !== id));
      } catch (error) {
        console.error("Error deleting doctor:", error.response?.data || error.message);

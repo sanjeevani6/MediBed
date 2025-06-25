@@ -13,7 +13,9 @@ const BedList = () => {
   useEffect(() => {
     const fetchBeds = async () => {
       try {
-        const res = await axios.get("https://medibed.onrender.com/api/v1/beds");
+        const res = await axios.get("https://medibed.onrender.com/api/v1/beds", {
+          withCredentials: true,
+        });
         setVacantBeds(res.data.vacantBeds);
         setOccupiedBeds(res.data.occupiedBeds);
       } catch (error) {

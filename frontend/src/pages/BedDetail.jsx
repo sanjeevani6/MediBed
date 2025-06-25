@@ -9,7 +9,11 @@ const BedDetail = () => {
   useEffect(() => {
     const fetchBedDetail = async () => {
       try {
-        const res = await axios.get(`https://medibed.onrender.com/api/v1/beds/${id}`);
+        const res =
+        axios.get("https://medibed.onrender.com/api/v1/beds", {
+          withCredentials: true,
+        });
+        
         setBed(res.data);
       } catch (error) {
         console.error("Error fetching bed details:", error);

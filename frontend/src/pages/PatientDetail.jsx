@@ -14,7 +14,9 @@ const PatientDetail = () => {
   useEffect(() => {
     const fetchPatient = async () => {
       try {
-        const res = await axios.get(`https://medibed.onrender.com/api/v1/patients/${id}`);
+        const res = await axios.get(`https://medibed.onrender.com/api/v1/patients/${id}`, {
+          withCredentials: true,
+        });
         setPatient(res.data);
       } catch (error) {
         console.error("Error fetching patient details:", error);
@@ -25,7 +27,9 @@ const PatientDetail = () => {
 
   const handleDischarge = async () => {
     try {
-      await axios.put(`https://medibed.onrender.com/api/v1/patients/${id}/discharge`);
+      await axios.put(`https://medibed.onrender.com/api/v1/patients/${id}/discharge`,{}, {
+        withCredentials: true,
+      });
       alert("Patient discharged successfully!");
       navigate("/patients");
     } catch (error) {
@@ -35,7 +39,9 @@ const PatientDetail = () => {
 
   const handleSeverityUpdate = async () => {
     try {
-      const res = await axios.put(`/api/v1/patients/${id}/severity`, { severity:Number(severity), note });
+      const res = await axios.put(`https://medibed.onrender.com/api/v1/patients/${id}/severity`, {},{ severity:Number(severity), note }, {
+        withCredentials: true,
+      });
       setPatient(res.data.patient);
       
       if (res.data.bedMessage) {

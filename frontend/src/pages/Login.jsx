@@ -3,33 +3,32 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import loginImage from "../assets/image.png";
 import medibedLogo from "../assets/logo.png";
+
 const Login = () => {
-  const [staffID, setStaffID] = useState(""); // Changed state variable name
+  const [hospitalName, setHospitalName] = useState("");
+  const [staffID, setStaffID] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError(""); // Reset error before new request
+    setError("");
 
     try {
       const { data } = await axios.post(
         "https://medibed.onrender.com/api/v1/auth/login",
-        { staffID, password },
+        { staffID, password, hospitalName },
         { withCredentials: true }
       );
 
-      console.log("Full login response:", data); // Debugging
       if (data.staff && data.token) {
         const userInfo = {
           ...data.staff,
-          token: data.token, // Add token to userInfo
+          token: data.token,
         };
-
         localStorage.setItem("userInfo", JSON.stringify(userInfo));
-        console.log("Navigating to /dashboard..."); // Debugging
-        navigate("/dashboard"); // Redirect on success
+        navigate("/dashboard");
       } else {
         throw new Error("Invalid response from server");
       }
@@ -40,26 +39,16 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex bg-gray-50">
-      {/* Left Side - Login Form (60%) */}
       <div className="w-full md:w-[60%] flex items-center justify-center p-8 bg-white">
         <div className="w-full max-w-md">
           <div className="text-center mb-12">
-            {/* Larger Circular MEDIBED Logo */}
             <div className="flex justify-center mb-6">
               <div className="rounded-full border-4 border-blue-50 p-2">
-                <img
-                  src={medibedLogo}
-                  alt="MEDIBED Logo"
-                  className="h-45 w-45 rounded-full object-contain" // Increased size
-                />
+                <img src={medibedLogo} alt="MEDIBED Logo" className="h-45 w-45 rounded-full object-contain" />
               </div>
             </div>
-            <h2 className="text-2xl font-bold text-gray-800">
-              SIGN IN
-            </h2>
-            <p className="text-gray-500 text-lg font-extrabold">
-              Hospital Bed Management System
-            </p>
+            <h2 className="text-2xl font-bold text-gray-800">SIGN IN</h2>
+            <p className="text-gray-500 text-lg font-extrabold">Hospital Bed Management System</p>
           </div>
 
           {error && (
@@ -71,25 +60,32 @@ const Login = () => {
           <form className="space-y-8" onSubmit={handleLogin}>
             <div className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Username
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Hospital Name</label>
                 <input
                   type="text"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-blue-300 transition-colors"
-                  placeholder="Enter your username"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter hospital name"
+                  value={hospitalName}
+                  onChange={(e) => setHospitalName(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Staff ID</label>
+                <input
+                  type="text"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter your staff ID"
                   value={staffID}
                   onChange={(e) => setStaffID(e.target.value)}
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Password
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
                 <input
                   type="password"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-blue-300 transition-colors"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -98,17 +94,24 @@ const Login = () => {
               </div>
             </div>
 
-            <button
-              type="submit"
-              className="login-button"
-            >
+            <button type="submit" className="login-button">
               Login
             </button>
           </form>
+
+          {/* Register hospital link */}
+          <p className="mt-6 text-center text-sm text-gray-600">
+            Want to register your hospital?{" "}
+            <span
+              onClick={() => navigate("/register")}
+              className="text-blue-600 hover:underline cursor-pointer font-semibold"
+            >
+              Click here
+            </span>
+          </p>
         </div>
       </div>
 
-      {/* Right Side - Image (40%) */}
       <div className="hidden md:block md:w-[40%] bg-blue-50 relative overflow-hidden">
         <img
           src={loginImage}
