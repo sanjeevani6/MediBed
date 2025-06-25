@@ -1,6 +1,6 @@
 import express from "express";
 import {authMiddleware} from "../middlewares/authMiddleware.js";
-import addDoctor from "../controllers/adddoctorController.js";
+import {addDoctor} from "../controllers/adddoctorController.js";
 import { countDoctors, deleteDoctor, getDoctors } from "../controllers/doctorController.js";
 
 const router = express.Router();
