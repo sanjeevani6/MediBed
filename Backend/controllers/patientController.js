@@ -21,7 +21,7 @@ export const addPatient = async (req, res) => {
     } = req.body;
     console.log("request body",req.body);
      // Check for an available bed of the requested type
-    const availableBed = await Bed.findOne({ type: bedType, status: "Vacant" });
+    const availableBed = await Bed.findOne({ type: bedType, status: "Vacant" , hospital: req.user.hospital,});
     console.log("availableBed",availableBed);
     if (!availableBed) {
       return res.status(400).json({ message: `No vacant ${bedType} beds available.` });
@@ -53,6 +53,7 @@ export const addPatient = async (req, res) => {
           timestamp: new Date(),
         },
       ],
+      hospital: req.user.hospital,
     });
 
     newPatient.bedHistory.push({
@@ -107,7 +108,7 @@ export const addPatient = async (req, res) => {
 //to count number of patients
 export const countPatients=async(req,res)=>{
   try {
-    const count = await Patient.countDocuments();
+    const count = await Patient.countDocuments({ hospital: req.user.hospital});
     res.json({ count });
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch patient count" });
@@ -117,7 +118,7 @@ export const countPatients=async(req,res)=>{
 export const getPatients = async (req, res) => {
   try {
     const { status } = req.query;
-    const patients = await Patient.find({ status });
+    const patients = await Patient.find({ status, hospital: req.user.hospital });
     res.json(patients);
   } catch (error) {
     res.status(500).json({ error: "Server Error" });
@@ -126,7 +127,7 @@ export const getPatients = async (req, res) => {
 
 export const getpatientdetail=async(req,res)=>{
   try {
-    const patient = await Patient.findById(req.params.id);
+    const patient = await Patient.findById({ _id: req.params.id, hospital: req.user.hospital });
     if (!patient) return res.status(404).json({ error: "Patient not found" });
     res.json(patient);
   } catch (error) {
@@ -136,7 +137,8 @@ export const getpatientdetail=async(req,res)=>{
 
 export const dischargepatient=async(req,res)=>{
   try {
-    const patient = await Patient.findById(req.params.id);
+    const patient = await Patient.findOne({ _id: req.params.id, hospital: req.user.hospital });
+
     if (!patient) {
       return res.status(404).json({ error: "Patient not found" });
     }
@@ -148,7 +150,8 @@ export const dischargepatient=async(req,res)=>{
 
     // Free the bed and update its history
 if (patient.assignedBed) {
-  const bed = await Bed.findById(patient.assignedBed);
+  const bed = await Bed.findOne({ _id: patient.assignedBed, hospital: req.user.hospital });
+
   if (bed) {
     const bedHistEntry = bed.history.find(
       (entry) => entry.patient.toString() === patient._id.toString() && !entry.dischargedAt

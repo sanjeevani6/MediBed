@@ -3,7 +3,10 @@ import Bed from "../models/bedmodel.js";
 export const addBed = async (req, res) => {
   try {
     const { bedNumber, type } = req.body;
-
+    const hospital = req.user.hospital;
+    if (!bedNumber || !type) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
     // Check if the bed already exists
     const existingBed = await Bed.findOne({ bedNumber });
     if (existingBed) {
@@ -13,6 +16,7 @@ export const addBed = async (req, res) => {
     const newBed = new Bed({
       bedNumber,
       type,
+      hospital,
       status: "Vacant",
     });
 
@@ -26,7 +30,7 @@ export const addBed = async (req, res) => {
 
 export const getAllBeds = async (req, res) => {
   try {
-    const beds = await Bed.find().populate({
+    const beds = await Bed.find({ hospital: req.user.hospital }).populate({
         path: "patient",
         model: "Patient", // Explicitly specify the model
         select: "name age severity"
@@ -45,7 +49,7 @@ export const getAllBeds = async (req, res) => {
 export const countBeds = async (req, res) => {
   try {
     // Count beds where status is "Vacant"
-    const count = await Bed.countDocuments({ status: "Vacant" });
+    const count = await Bed.countDocuments({ status: "Vacant", hospital: req.user.hospital });
     res.json({ count });
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch bed count" });
@@ -54,9 +58,14 @@ export const countBeds = async (req, res) => {
 
 export const getBedHistory = async (req, res) => {
   try {
-    const bed = await Bed.findById(req.params.id)
-    .populate("history.patient", "name age severity patient")
-     .populate("patient","name age severity");                                             ;
+    const hospitalId = req.user.hospital;
+
+    const bed = await Bed.findOne({
+      _id: req.params.id,
+      hospital: hospitalId,
+    })
+      .populate("history.patient", "name age severity")
+      .populate("patient", "name age severity");                                            ;
  console.log("bed:",bed);
     if (!bed) return res.status(404).json({ message: "Bed not found" });
 

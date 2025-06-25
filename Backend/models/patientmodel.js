@@ -40,6 +40,11 @@ const patientSchema = new mongoose.Schema(
         dischargedAt: { type: Date, required: false },
       }
     ],
+    hospital: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Hospital",
+      required: true,
+    },
   },
   { collection: "patients", timestamps: true }, // Ensure correct collection name
 );

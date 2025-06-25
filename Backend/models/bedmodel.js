@@ -13,6 +13,11 @@ const bedSchema = new mongoose.Schema({
       dischargedAt: { type: Date },
     },
   ],
+  hospital: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Hospital",
+    required: true,
+  },
 });
 
 export default mongoose.model("Bed",bedSchema,"Bed");

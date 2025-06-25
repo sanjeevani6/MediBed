@@ -3,7 +3,7 @@ import Doctor from "../models/doctormodel.js";
 // Get all doctors
  export const getDoctors = async (req, res) => {
   try {
-    const doctors = await Doctor.find();
+    const doctors = await Doctor.find({ hospital: req.user.hospital });
     res.status(200).json(doctors);
   } catch (error) {
     res.status(500).json({ message: "Error fetching doctors", error });
@@ -12,7 +12,7 @@ import Doctor from "../models/doctormodel.js";
 
 export const countDoctors=async (req, res) => {
   try {
-    const count = await Doctor.countDocuments();
+    const count = await Doctor.countDocuments({ hospital: req.user.hospital });
     res.json({ count });
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch doctor count" });
@@ -27,16 +27,19 @@ export const deleteDoctor = async (req, res) => {
     }
 
     const { id } = req.params;
-    const deletedDoctor = await Doctor.findByIdAndDelete(id);
-
-    if (!deletedDoctor) {
-      return res.status(404).json({ message: "Doctor not found" });
+    // Check if the doctor belongs to the current hospital
+    const doctor = await Doctor.findOne({ _id: id, hospital: req.user.hospital });
+    if (!doctor) {
+      return res.status(404).json({ message: "Doctor not found in your hospital" });
     }
+
+    await Doctor.findByIdAndDelete(id);
 
     res.status(200).json({ message: "Doctor deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: "Error deleting doctor", error });
   }
 };
+
 
 
