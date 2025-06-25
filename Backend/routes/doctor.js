@@ -14,7 +14,7 @@ const checkSuperadmin = (req, res, next) => {
 };
 
 router.post("/add-dr", authMiddleware, checkSuperadmin,addDoctor);
-router.get("/", getDoctors);
+router.get("/",authMiddleware, getDoctors);
 router.delete("/:id", authMiddleware, deleteDoctor);
 router.get("/count",authMiddleware,countDoctors);
 

@@ -9,8 +9,8 @@ const router = express.Router();
 router.post("/add-patients", authMiddleware, addPatient);
 router.get("/count",authMiddleware,countPatients);
 router.get("/", authMiddleware, getPatients);
-router.get("/:id",getpatientdetail);
-router.put("/:id/discharge",dischargepatient);
-router.put("/:id/severity", updateSeverity);
+router.get("/:id",authMiddleware,getpatientdetail);
+router.put("/:id/discharge",authMiddleware,dischargepatient);
+router.put("/:id/severity",authMiddleware, updateSeverity);
 export default router;
 
