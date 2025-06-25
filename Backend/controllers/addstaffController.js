@@ -13,22 +13,22 @@ const addstaff = async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    // Get hospital name from the authenticated user
-    const hospitalName = req.user?.hospital;
-    console.log("hospital name:",hospitalName);
-    if (!hospitalName) {
+    // Get hospital ID from the authenticated user
+    const hospitalId = req.user?.hospital;
+    console.log("Hospital ID from token:", hospitalId);
+
+    if (!hospitalId) {
       return res.status(400).json({ message: "Hospital not found in token" });
     }
 
-    // Find the hospital by name
-    const hospital = await Hospital.findOne({ name: hospitalName });
+    const hospital = await Hospital.findById(hospitalId);
     if (!hospital) {
       return res.status(404).json({ message: "Hospital not found" });
     }
 
-    // Check for existing staff with same staffID **in the same hospital**
+    // Check for existing staff with same staffID in the same hospital
     const existingStaff = await Staff.findOne({
-      staffID: staffID,
+      staffID,
       hospital: hospital._id,
     });
 
