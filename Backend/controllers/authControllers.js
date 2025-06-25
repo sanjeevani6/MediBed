@@ -16,7 +16,7 @@ const COOKIE_OPTIONS = {
 };
 
 // Generate Access Token (expires in 15 minutes)
-const generateAccessToken = (staff) => {
+const generateAccessToken = (staff,hospitalName) => {
   return jwt.sign(
     { id: staff._id, staffID: staff.staffID, name: staff.name, role: staff.role, hospital: hospitalName, },
     JWT_SECRET,
@@ -25,7 +25,7 @@ const generateAccessToken = (staff) => {
 };
 
 // Generate Refresh Token (expires in 7 days)
-const generateRefreshToken = (staff) => {
+const generateRefreshToken = (staff,hospitalName) => {
   return jwt.sign(
     { id: staff._id, staffID: staff.staffID, name: staff.name, role: staff.role, hospital: hospitalName, },
     REFRESH_SECRET,
