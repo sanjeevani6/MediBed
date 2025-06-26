@@ -10,7 +10,7 @@ const BedDetail = () => {
     const fetchBedDetail = async () => {
       try {
         const res =
-        axios.get("https://medibed.onrender.com/api/v1/beds", {
+        axios.get( `https://medibed.onrender.com/api/v1/beds/${id}`, {
           withCredentials: true,
         });
         
