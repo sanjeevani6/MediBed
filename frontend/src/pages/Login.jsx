@@ -4,16 +4,18 @@ import { useNavigate } from "react-router-dom";
 import loginImage from "../assets/image.png";
 import medibedLogo from "../assets/logo.png";
 
-const Login = () => {
+const Login = ({ setUser }) => {
   const [hospitalName, setHospitalName] = useState("");
   const [staffID, setStaffID] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoggingIn, setIsLoggingIn] = useState(false); //  cold start helper
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
+    setIsLoggingIn(true);
 
     try {
       const { data } = await axios.post(
@@ -23,17 +25,15 @@ const Login = () => {
       );
 
       if (data.staff && data.token) {
-        const userInfo = {
-          ...data.staff,
-          token: data.token,
-        };
-        localStorage.setItem("userInfo", JSON.stringify(userInfo));
+        setUser(data.staff); //  Set user immediately
         navigate("/dashboard");
       } else {
         throw new Error("Invalid response from server");
       }
     } catch (err) {
       setError(err.response?.data?.message || "Invalid credentials");
+    } finally {
+      setIsLoggingIn(false); //  Turn off loading
     }
   };
 
@@ -50,6 +50,13 @@ const Login = () => {
             <h2 className="text-2xl font-bold text-gray-800">SIGN IN</h2>
             <p className="text-gray-500 text-lg font-extrabold">Hospital Bed Management System</p>
           </div>
+
+          {/* Cold start loading popup */}
+          {isLoggingIn && (
+            <div className="bg-blue-100 border border-blue-300 text-blue-700 px-4 py-3 rounded mb-6 text-sm">
+              Logging in... This may take a few seconds during the first request.
+            </div>
+          )}
 
           {error && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
@@ -94,8 +101,12 @@ const Login = () => {
               </div>
             </div>
 
-            <button type="submit" className="login-button">
-              Login
+            <button
+              type="submit"
+              className={`login-button ${isLoggingIn ? "opacity-50 cursor-not-allowed" : ""}`}
+              disabled={isLoggingIn}
+            >
+              {isLoggingIn ? "Logging in..." : "Login"}
             </button>
           </form>
 

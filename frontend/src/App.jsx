@@ -21,7 +21,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import Register from "./pages/Register.jsx";
 const App = () => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+ 
 
   useEffect(() => {
     axios
@@ -34,19 +34,17 @@ const App = () => {
         console.error("Not authenticated", error);
         setUser(null);
       })
-      .finally(() => setLoading(false));
+     
   }, []);
 
-  if (loading) {
-    return <h1>Loading...</h1>;
-  }
+  
 
   return (
     <ChakraProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+        <Route path="/" element={<Login setUser={setUser} />} />
+        <Route path="/register" element={<Register setUser={setUser} />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<PrivateRoute user={user}><Dashboard /></PrivateRoute>} />
           <Route path="/staff-list" element={<PrivateRoute user={user}><StaffList user={user} /></PrivateRoute>} />
