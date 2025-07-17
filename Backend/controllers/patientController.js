@@ -108,7 +108,10 @@ export const addPatient = async (req, res) => {
 //to count number of patients
 export const countPatients=async(req,res)=>{
   try {
-    const count = await Patient.countDocuments({ hospital: req.user.hospital});
+    const count = await Patient.countDocuments({
+     hospital: req.user.hospital,
+      status: "ADMITTED" // Only count patients who are currently admitted
+    });
     res.json({ count });
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch patient count" });
