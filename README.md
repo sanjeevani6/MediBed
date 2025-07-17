@@ -3,6 +3,15 @@
 ## 🏥 Overview
 MediBed is a **hospital bed management system** designed for **hospital staff** to efficiently allocate and deallocate beds as patients are admitted and discharged. The system helps keep track of **patients, doctors, staff, and beds** in real-time. It provides authentication and role-based access, ensuring smooth hospital operations.
 
+---
+
+## 🔗 Live Link
+
+🌐 **Check it out here:** [Live Link - Click Here](https://comforting-fox-4fe49b.netlify.app/)
+
+
+---
+
 ## ✨ Features
 - **Bed Management**: Allocate and deallocate beds for patients.
 - **Authentication & Authorization**: JWT-based authentication with role-based access control.
